@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="br.com.tiradividas.activityes.SignUpActivity"
+    tools:showIn="@layout/activity_sign_up">
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/layout_nome"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nome:"
+                android:id="@+id/text_cadas_nome"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="4dp"
+                android:textSize="18sp"
+                android:textColor="#000000"
+                android:typeface="serif"
+                android:textStyle="bold" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:ems="10"
+                android:id="@+id/edit_casda_nome"
+                android:hint="Nome " />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/layout_email"
+            android:layout_below="@+id/layout_nome"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="E-mail:"
+                android:id="@+id/text_cadas_email"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="4dp"
+                android:textSize="18sp"
+                android:textColor="#000000"
+                android:typeface="serif"
+                android:textStyle="bold" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:id="@+id/edit_cadas_email"
+                android:hint="e-mail"
+                android:inputType="textEmailAddress" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/layout_escolaridade"
+            android:layout_below="@+id/layout_email"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Escolaridade:"
+                android:id="@+id/text_cadas_escolaridade"
+                android:textSize="18sp"
+                android:textColor="#000000"
+                android:textStyle="bold"
+                android:typeface="serif" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:ems="10"
+                android:id="@+id/edit_cadas_escolaridade" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/layout_idade"
+            android:layout_below="@+id/layout_escolaridade"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Idade:"
+                android:id="@+id/text_cadas_idade"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="4dp"
+                android:textSize="18sp"
+                android:textColor="#000000"
+                android:typeface="serif"
+                android:textStyle="bold" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:id="@+id/edit_cadas_idade"
+                android:hint="Idade"
+                android:inputType="number" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/layout_mat_dif"
+            android:layout_below="@+id/layout_idade"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Materia com dificuldade"
+                android:id="@+id/text_cadas_mat_dif"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="4dp"
+                android:textSize="18sp"
+                android:textColor="#000000"
+                android:typeface="serif"
+                android:textStyle="bold"
+                android:layout_marginTop="5dp" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:id="@+id/edit_cadas_mat_dif"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:inputType="text" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/layout_mat_domi"
+            android:layout_below="@+id/layout_mat_dif"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Materia que Domina"
+                android:id="@+id/text_cadas_mat_dom"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="4dp"
+                android:textSize="18sp"
+                android:textColor="#000000"
+                android:typeface="serif"
+                android:textStyle="bold"
+                android:layout_marginTop="5dp" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:ems="10"
+                android:id="@+id/edit_cadas_mat_dom"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/layout_senha"
+            android:layout_below="@+id/layout_mat_domi"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Senha:"
+                android:id="@+id/text_cadas_senha"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="4dp"
+                android:textSize="18sp"
+                android:textColor="#000000"
+                android:typeface="serif"
+                android:textStyle="bold" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword|text"
+                android:ems="10"
+                android:id="@+id/edit_cadas_senha"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="10dp" />
+        </LinearLayout>
+
+        <Button
+            android:layout_width="300dp"
+            android:layout_height="60dp"
+            android:text="Cadastrar"
+            android:id="@+id/buttom_cadas"
+            android:layout_below="@+id/layout_senha"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="5dp"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:typeface="serif"
+            android:textStyle="bold" />
+
+        <ProgressBar
+            android:layout_alignParentBottom="true"
+            android:id="@+id/sign_up_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:visibility="gone"
+            android:layout_below="@+id/layout_senha"
+            android:layout_centerHorizontal="true" />
+
+
+
+</RelativeLayout>
