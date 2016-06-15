@@ -7,6 +7,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
@@ -59,7 +60,7 @@ public class LoginActivity extends CommonActivity {
     }
 
     protected void initUser(){
-        user = new User();
+        user = User.newUser();
         user.setEmail( email.getText().toString() );
         user.setSenha( senha.getText().toString() );
     }
@@ -117,6 +118,8 @@ public class LoginActivity extends CommonActivity {
                     @Override
                     public void onAuthenticated(AuthData authData) {
                         user.saveTokenSP( LoginActivity.this, authData.getToken() );
+                        user.setId(authData.getUid());
+                        showToast(authData.getUid());
                         closeProgressBar();
                         callMainActivity();
                     }

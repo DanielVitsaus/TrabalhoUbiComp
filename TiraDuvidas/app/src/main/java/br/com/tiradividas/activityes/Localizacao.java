@@ -18,12 +18,17 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.firebase.client.Firebase;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.maps.android.SphericalUtil;
 
 import br.com.tiradividas.MainActivity;
+import br.com.tiradividas.Model.User;
 import br.com.tiradividas.R;
+import br.com.tiradividas.util.LibraryClass;
 
 public class Localizacao extends MainActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
@@ -32,12 +37,16 @@ public class Localizacao extends MainActivity implements GoogleApiClient.Connect
     private GoogleApiClient mGoogleApiClient;
     private final int MY_LOCATION_REQUEST_CODE = 1;
 
+    private Firebase firebase;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_localizacao);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        firebase = LibraryClass.getFirebase();
 
         tvCoordinate = (TextView) findViewById(R.id.localizacao);
 
@@ -99,7 +108,11 @@ public class Localizacao extends MainActivity implements GoogleApiClient.Connect
         if(l != null){
             Log.i("LOG", "latitude: "+l.getLatitude());
             Log.i("LOG", "longitude: "+l.getLongitude());
-            tvCoordinate.setText(l.getLatitude()+" | "+l.getLongitude());
+            LatLng posicaoInicial = new LatLng(l.getLatitude(),l.getLongitude());
+            LatLng posicaiFinal = new LatLng(-21.774414,-43.380779);
+            double distancia = SphericalUtil.computeDistanceBetween(posicaoInicial, posicaiFinal);
+            tvCoordinate.setText(l.getLatitude()+" | "+l.getLongitude() + "\n"+ formatNumber(distancia));
+            saveLatLon(l.getLatitude(),l.getLongitude());
         }
 
     }
@@ -112,19 +125,83 @@ public class Localizacao extends MainActivity implements GoogleApiClient.Connect
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.i("LOG", "onConnectionFailed("+connectionResult+")");
-        //pararConexaoComGoogleApi();
+        pararConexaoComGoogleApi();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        //pararConexaoComGoogleApi();
+        pararConexaoComGoogleApi();
     }
 
     public void pararConexaoComGoogleApi() {
         //Verificando se está conectado para então cancelar a conexão!
         if (mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
+        }
+    }
+
+    @SuppressLint("DefaultLocale")
+    private String formatNumber(double distance) {
+        String unit = "m";
+        if (distance > 1000) {
+            distance /= 1000;
+            unit = "km";
+        }
+
+        return String.format("%4.3f%s", distance, unit);
+    }
+
+    private void saveLatLon(double latitude, double longitude){
+
+        Local local = new Local(String.valueOf(latitude),String.valueOf(latitude),LibraryClass.getSP(getBaseContext(), "TOKEN"));
+        local.saveLocal();
+    }
+
+    private class Local{
+
+        private String latitude;
+        private String logetude;
+        private String tokenUser;
+
+        public Local() {
+        }
+
+        public Local(String latitude, String logetude, String tokenUser) {
+            this.latitude = latitude;
+            this.logetude = logetude;
+            this.tokenUser = tokenUser;
+        }
+
+        public String getLatitude() {
+            return latitude;
+        }
+
+        public void setLatitude(String latitude) {
+            this.latitude = latitude;
+        }
+
+        public String getLogetude() {
+            return logetude;
+        }
+
+        public void setLogetude(String logetude) {
+            this.logetude = logetude;
+        }
+
+        public String getTokenUser() {
+            return tokenUser;
+        }
+
+        public void setTokenUser(String tokenUser) {
+            this.tokenUser = tokenUser;
+        }
+
+        public void saveLocal(){
+            User user = User.newUser();
+            firebase = firebase.child("localizacao").child(user.getId());
+            firebase.setValue(this);
+            firebase.unauth();
         }
     }
 

@@ -70,7 +70,7 @@ public class SignUpActivity extends CommonActivity {
     }
 
     protected void initUser(){
-        user = new User();
+        user = User.newUser();
         user.setNome( name.getText().toString() );
         user.setEmail( email.getText().toString() );
         user.setEscolaridade( escolaridade.getText().toString());

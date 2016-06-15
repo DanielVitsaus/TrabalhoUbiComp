@@ -18,6 +18,7 @@ public class User {
 
     public static String PROVIDER = "PROVIDER";
     public static String TOKEN = "TOKEN";
+    private static User user;
 
     private String nome;
     private String email;
@@ -31,6 +32,13 @@ public class User {
     private String id;
     private String id_foto;
     private ArrayList<String> ids_post;
+
+    public static User newUser(){
+        if (user == null){
+            user = new User();
+        }
+        return  ( user );
+    }
 
     public User() {
     }
@@ -192,7 +200,7 @@ public class User {
         firebase = firebase.child("users").child( getId() );
 
         setSenha(null);
-        setId(null);
+        //setId(null);
         firebase.setValue( this );
     }
 
