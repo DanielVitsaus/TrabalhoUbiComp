@@ -18,4 +18,5 @@
     <string name="title_activity_cadastro">Cadastro</string>
     <string name="title_activity_sign_up">SignUpActivity</string>
     <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_chat">ChatActivity</string>
 </resources>

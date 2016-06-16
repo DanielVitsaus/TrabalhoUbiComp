@@ -105,6 +105,14 @@ public class Local implements GoogleApiClient.ConnectionCallbacks,GoogleApiClien
         return String.format("%4.3f%s", distance, unit);
     }
 
+    public String calculaDistancia(double lat_this, double log_this, double lat_final, double log_final){
+
+        LatLng posicaoInicial = new LatLng(lat_this,log_this);
+        LatLng posicaiFinal = new LatLng(lat_final,log_final);
+        distancia = SphericalUtil.computeDistanceBetween(posicaoInicial, posicaiFinal);
+
+        return formatNumber(distancia);
+    }
     public double getDistancia() {
         return distancia;
     }
