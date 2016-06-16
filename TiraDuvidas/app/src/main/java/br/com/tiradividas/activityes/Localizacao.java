@@ -28,6 +28,7 @@ import com.google.maps.android.SphericalUtil;
 import br.com.tiradividas.MainActivity;
 import br.com.tiradividas.Model.User;
 import br.com.tiradividas.R;
+import br.com.tiradividas.util.CustomValueEventListener;
 import br.com.tiradividas.util.LibraryClass;
 
 public class Localizacao extends MainActivity implements GoogleApiClient.ConnectionCallbacks,
@@ -38,6 +39,7 @@ public class Localizacao extends MainActivity implements GoogleApiClient.Connect
     private final int MY_LOCATION_REQUEST_CODE = 1;
 
     private Firebase firebase;
+    private CustomValueEventListener customValueEventListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,20 +48,14 @@ public class Localizacao extends MainActivity implements GoogleApiClient.Connect
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        firebase = LibraryClass.getFirebase();
+        firebase = LibraryClass.getFirebase().child("users");
+
+        customValueEventListener = new CustomValueEventListener();
+        firebase.addValueEventListener( customValueEventListener );
+
 
         tvCoordinate = (TextView) findViewById(R.id.localizacao);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        if (fab != null) {
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                }
-            });
-        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -132,12 +128,22 @@ public class Localizacao extends MainActivity implements GoogleApiClient.Connect
     protected void onStop() {
         super.onStop();
         pararConexaoComGoogleApi();
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        firebase.removeEventListener( customValueEventListener );
     }
 
     public void pararConexaoComGoogleApi() {
         //Verificando se está conectado para então cancelar a conexão!
         if (mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
+        }
+        if (firebase.getAuth() != null){
+            firebase.unauth();
         }
     }
 
@@ -154,11 +160,15 @@ public class Localizacao extends MainActivity implements GoogleApiClient.Connect
 
     private void saveLatLon(double latitude, double longitude){
 
-        Local local = new Local(String.valueOf(latitude),String.valueOf(latitude),LibraryClass.getSP(getBaseContext(), "TOKEN"));
-        local.saveLocal();
+        User user = LibraryClass.getUser();
+        user.setLatitude(String.valueOf(latitude));
+        user.setLogetude(String.valueOf(longitude));
+        user.saveDB();
+        //Local local = new Local(String.valueOf(latitude),String.valueOf(longitude),LibraryClass.getSP(getBaseContext(), "TOKEN"));
+        //local.saveLocal();
     }
 
-    private class Local{
+    public class Local{
 
         private String latitude;
         private String logetude;
@@ -198,10 +208,9 @@ public class Localizacao extends MainActivity implements GoogleApiClient.Connect
         }
 
         public void saveLocal(){
-            User user = User.newUser();
-            firebase = firebase.child("localizacao").child(user.getId());
+            User user = LibraryClass.getUser();
+            firebase = firebase.child(user.getId()).child("localizacao");
             firebase.setValue(this);
-            firebase.unauth();
         }
     }
 

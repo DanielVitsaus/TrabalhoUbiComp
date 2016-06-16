@@ -5,12 +5,15 @@ import android.content.SharedPreferences;
 
 import com.firebase.client.Firebase;
 
+import br.com.tiradividas.Model.User;
+
 /**
  * Created by daniel on 13/06/16.
  */
 public final class LibraryClass {
     public static String PREF = "PREF";
     private static Firebase firebase;
+    private static User user;
 
 
     private LibraryClass(){}
@@ -24,7 +27,13 @@ public final class LibraryClass {
         return( firebase );
     }
 
+    public static User getUser(){
+        if (user == null){
+            user = new User();
+        }
 
+        return ( user );
+    }
 
 
     static public void saveSP(Context context, String key, String value ){
@@ -36,5 +45,10 @@ public final class LibraryClass {
         SharedPreferences sp = context.getSharedPreferences(PREF, Context.MODE_PRIVATE);
         String token = sp.getString(key, "");
         return( token );
+    }
+
+    static  public  void removeSP(Context context, String key){
+        SharedPreferences sp = context.getSharedPreferences(PREF, Context.MODE_PRIVATE);
+        sp.edit().remove(key).apply();
     }
 }

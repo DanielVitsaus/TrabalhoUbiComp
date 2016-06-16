@@ -60,7 +60,7 @@ public class LoginActivity extends CommonActivity {
     }
 
     protected void initUser(){
-        user = User.newUser();
+        user = LibraryClass.getUser();
         user.setEmail( email.getText().toString() );
         user.setSenha( senha.getText().toString() );
     }
@@ -85,25 +85,26 @@ public class LoginActivity extends CommonActivity {
     }
 
     private void verifyUserLogged(){
+        initUser();
         if( firebase.getAuth() != null ){
+            user.setId(firebase.child("user").getAuth().getUid());
             callMainActivity();
         }
         else{
-            initUser();
 
             if( !user.getTokenSP(this).isEmpty() ){
-                firebase.authWithPassword(
-                        "password",
+                firebase.authWithCustomToken(
                         user.getTokenSP(this),
                         new Firebase.AuthResultHandler() {
                             @Override
                             public void onAuthenticated(AuthData authData) {
                                 user.saveTokenSP( LoginActivity.this, authData.getToken() );
+                                user.setId(authData.getUid());
                                 callMainActivity();
                             }
 
                             @Override
-                            public void onAuthenticationError(FirebaseError firebaseError) {}
+                            public void onAuthenticationError(FirebaseError firebaseError) { }
                         }
                 );
             }
@@ -119,7 +120,6 @@ public class LoginActivity extends CommonActivity {
                     public void onAuthenticated(AuthData authData) {
                         user.saveTokenSP( LoginActivity.this, authData.getToken() );
                         user.setId(authData.getUid());
-                        showToast(authData.getUid());
                         closeProgressBar();
                         callMainActivity();
                     }

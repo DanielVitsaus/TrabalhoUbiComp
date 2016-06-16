@@ -8,15 +8,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.firebase.client.Firebase;
+
 import br.com.tiradividas.activityes.Agenda;
 import br.com.tiradividas.activityes.Forum;
 import br.com.tiradividas.activityes.Localizacao;
+import br.com.tiradividas.activityes.LoginActivity;
 import br.com.tiradividas.activityes.MinhasDuvidas;
 import br.com.tiradividas.activityes.Perfil;
+import br.com.tiradividas.util.LibraryClass;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    protected static final String TOKEN = "TOKEN";
 
     @Override
     public void onBackPressed() {
@@ -79,6 +84,13 @@ public class MainActivity extends AppCompatActivity
             finish();
             Intent intent  = new Intent(this.getApplication(), Agenda.class);
             startActivity(intent);
+        }else if (id == R.id.loguot) {
+            Firebase firebase = LibraryClass.getFirebase();
+            firebase.unauth();
+            LibraryClass.removeSP(this, TOKEN);
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

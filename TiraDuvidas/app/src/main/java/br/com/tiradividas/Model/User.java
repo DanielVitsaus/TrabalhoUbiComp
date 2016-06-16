@@ -2,6 +2,7 @@ package br.com.tiradividas.Model;
 
 import android.content.Context;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.firebase.client.Firebase;
 import com.firebase.client.ValueEventListener;
 
@@ -9,11 +10,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import br.com.tiradividas.activityes.Localizacao;
 import br.com.tiradividas.util.LibraryClass;
 
-/**
- * Created by daniel on 12/06/16.
- */
+@JsonIgnoreProperties({"id", "senha"})
 public class User {
 
     public static String PROVIDER = "PROVIDER";
@@ -32,6 +32,8 @@ public class User {
     private String id;
     private String id_foto;
     private ArrayList<String> ids_post;
+    private String latitude;
+    private String logetude;
 
     public static User newUser(){
         if (user == null){
@@ -185,6 +187,23 @@ public class User {
     }
 
 
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLogetude() {
+        return logetude;
+    }
+
+    public void setLogetude(String logetude) {
+        this.logetude = logetude;
+    }
+
+
     public String getTokenSP(Context context ){
         String token = LibraryClass.getSP( context, TOKEN );
         return( token );
@@ -198,9 +217,6 @@ public class User {
     public void saveDB(){
         Firebase firebase = LibraryClass.getFirebase();
         firebase = firebase.child("users").child( getId() );
-
-        setSenha(null);
-        //setId(null);
         firebase.setValue( this );
     }
 
