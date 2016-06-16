@@ -64,26 +64,26 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_perfil) {
-            finish();
             Intent intent  = new Intent(this.getApplication(), Perfil.class);
             startActivity(intent);
+            finish();
 
         } else if (id == R.id.nav_camera) {
-            finish();
             Intent intent  = new Intent(this.getApplication(), Forum.class);
             startActivity(intent);
-        } else if (id == R.id.nav_gallery) {
             finish();
+        } else if (id == R.id.nav_gallery) {
             Intent intent  = new Intent(this.getApplication(), MinhasDuvidas.class);
             startActivity(intent);
-        } else if (id == R.id.nav_slideshow) {
             finish();
+        } else if (id == R.id.nav_slideshow) {
             Intent intent  = new Intent(this.getApplication(), Localizacao.class);
             startActivity(intent);
-        }else if (id == R.id.nav_manage) {
             finish();
+        }else if (id == R.id.nav_manage) {
             Intent intent  = new Intent(this.getApplication(), Agenda.class);
             startActivity(intent);
+            finish();
         }else if (id == R.id.loguot) {
             Firebase firebase = LibraryClass.getFirebase();
             firebase.unauth();

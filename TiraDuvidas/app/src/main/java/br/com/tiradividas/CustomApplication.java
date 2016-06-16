@@ -1,14 +1,10 @@
 package br.com.tiradividas;
 
-import android.app.Application;
-import android.content.Context;
-import android.renderscript.Script;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
 import com.firebase.client.Firebase;
 
-import br.com.tiradividas.Model.User;
 import br.com.tiradividas.util.LibraryClass;
 
 /**

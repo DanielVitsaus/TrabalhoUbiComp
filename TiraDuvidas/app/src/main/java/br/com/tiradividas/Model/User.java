@@ -4,13 +4,10 @@ import android.content.Context;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.firebase.client.Firebase;
-import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
-import br.com.tiradividas.activityes.Localizacao;
 import br.com.tiradividas.util.LibraryClass;
 
 @JsonIgnoreProperties({"id", "senha"})

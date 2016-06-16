@@ -1,6 +1,7 @@
 package br.com.tiradividas.util;
 
 import android.util.Log;
+
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
