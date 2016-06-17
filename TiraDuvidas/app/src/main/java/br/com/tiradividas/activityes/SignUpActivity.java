@@ -97,7 +97,7 @@ public class SignUpActivity extends CommonActivity {
                     @Override
                     public void onSuccess(Map<String, Object> stringObjectMap) {
                         user.setId( stringObjectMap.get("uid").toString() );
-                        showToast(local.formatNumber(local.getDistancia()));
+                        //showToast(local.formatNumber(local.getDistancia()));
                         user.setLatitude(String.valueOf(local.getLatitude()));
                         user.setLogetude(String.valueOf(local.getLogetude()));
                         user.saveDB();

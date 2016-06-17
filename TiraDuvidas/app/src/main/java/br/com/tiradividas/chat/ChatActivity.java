@@ -45,7 +45,7 @@ public class ChatActivity extends ListActivity {
 
         setTitle("Chatting as " + mUsername);
 
-        mFirebaseRef = LibraryClass.getFirebase().child("chat");
+        mFirebaseRef = LibraryClass.getFirebase_chat().child("chat");
 
         EditText inputText = (EditText) findViewById(R.id.messageInput);
         inputText.setOnEditorActionListener(new TextView.OnEditorActionListener() {

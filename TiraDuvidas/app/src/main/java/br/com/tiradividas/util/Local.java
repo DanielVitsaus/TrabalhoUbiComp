@@ -29,6 +29,8 @@ public class Local implements GoogleApiClient.ConnectionCallbacks,GoogleApiClien
     private double distancia;
     private double latitude;
     private double logetude;
+    private Location location;
+    private Bundle bundle;
 
 
     public Local(Activity activity) {
@@ -49,6 +51,7 @@ public class Local implements GoogleApiClient.ConnectionCallbacks,GoogleApiClien
     @Override
     public void onConnected(@Nullable Bundle bundle) {
 
+        this.bundle = bundle;
         Log.i("LOG", "onConnected(" + bundle + ")");
 
 
@@ -62,16 +65,16 @@ public class Local implements GoogleApiClient.ConnectionCallbacks,GoogleApiClien
             // for ActivityCompat#requestPermissions for more details.
             return ;
         }
-        Location l = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
-        if(l != null){
-            Log.i("LOG", "latitude: "+l.getLatitude());
-            Log.i("LOG", "longitude: "+l.getLongitude());
-            latitude = l.getLatitude();
-            logetude = l.getLongitude();
-            LatLng posicaoInicial = new LatLng(latitude,logetude);
-            LatLng posicaiFinal = new LatLng(-21.774414,-43.380779);
-            distancia = SphericalUtil.computeDistanceBetween(posicaoInicial, posicaiFinal);
+        if(location != null){
+            latitude = location.getLatitude();
+            logetude = location.getLongitude();
+            Log.i("LOG", "latitude: "+latitude);
+            Log.i("LOG", "longitude: "+logetude);
+            //LatLng posicaoInicial = new LatLng(latitude,logetude);
+            //LatLng posicaiFinal = new LatLng(-21.774414,-43.380779);
+            //distancia = SphericalUtil.computeDistanceBetween(posicaoInicial, posicaiFinal);
         }
 
     }
@@ -102,7 +105,7 @@ public class Local implements GoogleApiClient.ConnectionCallbacks,GoogleApiClien
             unit = "km";
         }
 
-        return String.format("%4.3f%s", distance, unit);
+        return String.format("%3.2f%s", distance, unit);
     }
 
     public String calculaDistancia(double lat_this, double log_this, double lat_final, double log_final){
@@ -113,6 +116,16 @@ public class Local implements GoogleApiClient.ConnectionCallbacks,GoogleApiClien
 
         return formatNumber(distancia);
     }
+
+    public Location getLocation() {
+        this.onConnected(this.bundle);
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
     public double getDistancia() {
         return distancia;
     }

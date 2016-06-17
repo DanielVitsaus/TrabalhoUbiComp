@@ -1,18 +1,9 @@
 package br.com.tiradividas.activityes;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,18 +11,12 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
 
+import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.server.converter.StringToIntConverter;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.maps.android.SphericalUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,11 +29,10 @@ import br.com.tiradividas.adapter.UserRecyclerAdapter;
 import br.com.tiradividas.adapter.UserViewHolder;
 import br.com.tiradividas.chat.ChatActivity;
 import br.com.tiradividas.util.CustomChildEventListener;
-import br.com.tiradividas.util.CustomValueEventListener;
 import br.com.tiradividas.util.LibraryClass;
 import br.com.tiradividas.util.Local;
 
-public class Localizacao extends MainActivity {
+public class Localizacao extends MainActivity implements ChildEventListener {
 
     private String nomeU = "UserChat";
     private Local local;
@@ -78,7 +62,7 @@ public class Localizacao extends MainActivity {
         firebase = LibraryClass.getFirebase().child("users");
 
         //customChildEventListener = new CustomChildEventListener();
-        //firebase.addChildEventListener( customChildEventListener );
+        firebase.addChildEventListener(this);
 
         fab = (FloatingActionButton) findViewById(R.id.fab_chat);
 
@@ -98,7 +82,7 @@ public class Localizacao extends MainActivity {
 
 
         Log.i("log", user.getId());
-
+        /*
         firebase.addValueEventListener(new ValueEventListener() {
 
             @Override
@@ -140,28 +124,53 @@ public class Localizacao extends MainActivity {
 
             }
         });
+        */
+
 
 
     }
 
 
-    private void initFirebaseAdapter(){
+    private void initFirebaseAdapter() {
 
-        Log.i("log", "ATU -> "+ user.toString());
-        adapter = new UserRecyclerAdapter(User.class,R.layout.activity_localizacao,UserViewHolder.class,firebase );
+        Log.i("log", "ATU -> " + user.toString());
+        adapter = new UserRecyclerAdapter(User.class, R.layout.activity_localizacao, UserViewHolder.class, firebase);
 
         RecyclerView rvUsers = (RecyclerView) findViewById(R.id.lista);
         if (rvUsers != null) {
-            rvUsers.setHasFixedSize( true );
-            rvUsers.setLayoutManager( new LinearLayoutManager(this));
+            rvUsers.setHasFixedSize(true);
+            rvUsers.setLayoutManager(new LinearLayoutManager(this));
             rvUsers.setAdapter(adapter);
         }
     }
 
-    private void initUserAdapte(List<User> users){
+    private void initUserAdapte(List<User> users) {
         myUserAdapter = new UserAdapter(users, local);
         recyclerView.setLayoutManager(new LinearLayoutManager(Localizacao.this));
         recyclerView.setAdapter(myUserAdapter);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        initUserAdapte(users);
+        if (fab != null) {
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("nome", nomeU);
+                    Intent intent = new Intent(Localizacao.this, ChatActivity.class);
+                    intent.putExtra("nome", nomeU);
+                    startActivity(intent);
+                    //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                    //       .setAction("Action", null).show();
+                }
+            });
+
+        }
+
     }
 
     @Override
@@ -175,8 +184,53 @@ public class Localizacao extends MainActivity {
         super.onDestroy();
         users.clear();
         //adapter.cleanup();
-        //firebase.removeEventListener( customChildEventListener );
+        firebase.removeEventListener(this);
     }
 
 
+    @Override
+    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+        //for (DataSnapshot d : dataSnapshot.getChildren()) {
+            User u = dataSnapshot.getValue(User.class);
+            u.setId(dataSnapshot.getKey());
+        if (u == null){
+            Log.i("log", "User NULL");
+        }
+        if (dataSnapshot.exists()){
+            Log.i("log", "DATA null");
+        }
+            if (user.getId().compareTo(u.getId()) != 0) {
+                users.add(u);
+
+            } else {
+                user = u;
+                nomeU = u.getNome();
+
+            }
+        //}
+
+
+    }
+
+    @Override
+    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+
+    }
+
+    @Override
+    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+    }
+
+    @Override
+    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+    }
+
+    @Override
+    public void onCancelled(FirebaseError firebaseError) {
+
+    }
 }

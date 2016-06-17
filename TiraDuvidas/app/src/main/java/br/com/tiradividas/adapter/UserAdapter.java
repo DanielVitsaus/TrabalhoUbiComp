@@ -40,7 +40,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         //local.
         holder.text1.setText(users.get(position).getNome());
         //holder.text2.setText(String.valueOf(users.get(position).getEmail()));
-        holder.text2.setText("Dintancia -> " +local.calculaDistancia(
+        holder.text2.setText("Distancia -> " +local.calculaDistancia(
                 local.getLatitude(), local.getLogetude(),
                 Double.valueOf(users.get(position).getLatitude()),
                 Double.valueOf(users.get(position).getLogetude()) ) );

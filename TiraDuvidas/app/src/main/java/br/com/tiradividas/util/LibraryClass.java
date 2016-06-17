@@ -13,6 +13,7 @@ import br.com.tiradividas.Model.User;
 public final class LibraryClass {
     public static String PREF = "PREF";
     private static Firebase firebase;
+    private static Firebase firebase_chat;
     private static User user;
 
 
@@ -25,6 +26,14 @@ public final class LibraryClass {
         }
 
         return( firebase );
+    }
+
+    public static Firebase getFirebase_chat(){
+        if ( firebase_chat == null ){
+            firebase_chat = new Firebase("https://chatduvidas.firebaseio.com/");
+        }
+
+        return ( firebase_chat );
     }
 
     public static User getUser(){
