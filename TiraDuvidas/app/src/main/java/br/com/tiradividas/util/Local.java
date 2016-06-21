@@ -14,14 +14,20 @@ import android.util.Log;
 import com.firebase.client.Firebase;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.SphericalUtil;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import br.com.tiradividas.Model.User;
+
 /**
  * Created by danielcandido on 16/06/16.
  */
-public class Local implements GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener {
+public class Local implements GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener,LocationListener {
 
     private GoogleApiClient mGoogleApiClient;
     private final int MY_LOCATION_REQUEST_CODE = 1;
@@ -31,11 +37,19 @@ public class Local implements GoogleApiClient.ConnectionCallbacks,GoogleApiClien
     private double logetude;
     private Location location;
     private Bundle bundle;
+    private Firebase firebase;
+    private User user;
+    private Map<String, Object> map;
 
 
     public Local(Activity activity) {
         this.activity = activity;
         callConnection();
+        map = new HashMap<>();
+        firebase = LibraryClass.getFirebase();
+        user = LibraryClass.getUser();
+
+        firebase = firebase.child("users").child(user.getId());
     }
 
     private synchronized void callConnection() {
@@ -72,6 +86,12 @@ public class Local implements GoogleApiClient.ConnectionCallbacks,GoogleApiClien
             logetude = location.getLongitude();
             Log.i("LOG", "latitude: "+latitude);
             Log.i("LOG", "longitude: "+logetude);
+
+            map.put("latitude", String.valueOf(location.getLatitude()));
+            map.put("logetude", String.valueOf(location.getLongitude()));
+
+            firebase.updateChildren(map);
+
             //LatLng posicaoInicial = new LatLng(latitude,logetude);
             //LatLng posicaiFinal = new LatLng(-21.774414,-43.380779);
             //distancia = SphericalUtil.computeDistanceBetween(posicaoInicial, posicaiFinal);
@@ -90,9 +110,28 @@ public class Local implements GoogleApiClient.ConnectionCallbacks,GoogleApiClien
         pararConexaoComGoogleApi();
     }
 
+    @Override
+    public void onLocationChanged(Location location) {
+
+        Log.i("LOG", "latitude: "+location.getLatitude());
+        Log.i("LOG", "longitude: "+location.getLongitude());
+
+        map.put("latitude", String.valueOf(location.getLatitude()));
+        map.put("logentude", String.valueOf(location.getLongitude()));
+
+        firebase.updateChildren(map);
+
+    }
+
+    private void stopLocationUpdates() {
+        LocationServices.FusedLocationApi.removeLocationUpdates(
+                mGoogleApiClient, this);
+    }
+
     public void pararConexaoComGoogleApi() {
         //Verificando se está conectado para então cancelar a conexão!
         if (mGoogleApiClient.isConnected()) {
+            stopLocationUpdates();
             mGoogleApiClient.disconnect();
         }
     }
@@ -149,4 +188,6 @@ public class Local implements GoogleApiClient.ConnectionCallbacks,GoogleApiClien
     public void setLogetude(double logetude) {
         this.logetude = logetude;
     }
+
+
 }

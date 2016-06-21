@@ -32,7 +32,7 @@ import br.com.tiradividas.util.CustomChildEventListener;
 import br.com.tiradividas.util.LibraryClass;
 import br.com.tiradividas.util.Local;
 
-public class Localizacao extends MainActivity implements ChildEventListener {
+public class Localizacao extends MainActivity {
 
     private String nomeU = "UserChat";
     private Local local;
@@ -62,7 +62,7 @@ public class Localizacao extends MainActivity implements ChildEventListener {
         firebase = LibraryClass.getFirebase().child("users");
 
         //customChildEventListener = new CustomChildEventListener();
-        firebase.addChildEventListener(this);
+        //firebase.addChildEventListener(this);
 
         fab = (FloatingActionButton) findViewById(R.id.fab_chat);
 
@@ -82,11 +82,12 @@ public class Localizacao extends MainActivity implements ChildEventListener {
 
 
         Log.i("log", user.getId());
-        /*
+
         firebase.addValueEventListener(new ValueEventListener() {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                users.clear();
                 Log.i("log" , "Entrou");
                 for( DataSnapshot d : dataSnapshot.getChildren() ){
                     User u = d.getValue( User.class );
@@ -124,7 +125,6 @@ public class Localizacao extends MainActivity implements ChildEventListener {
 
             }
         });
-        */
 
 
 
@@ -154,6 +154,7 @@ public class Localizacao extends MainActivity implements ChildEventListener {
     protected void onStart() {
         super.onStart();
 
+        /*
         initUserAdapte(users);
         if (fab != null) {
             fab.setOnClickListener(new View.OnClickListener() {
@@ -170,6 +171,8 @@ public class Localizacao extends MainActivity implements ChildEventListener {
             });
 
         }
+        */
+
 
     }
 
@@ -183,11 +186,12 @@ public class Localizacao extends MainActivity implements ChildEventListener {
     protected void onDestroy() {
         super.onDestroy();
         users.clear();
+        local.pararConexaoComGoogleApi();
         //adapter.cleanup();
-        firebase.removeEventListener(this);
+        //firebase.removeEventListener(this);
     }
 
-
+    /*
     @Override
     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
@@ -233,4 +237,6 @@ public class Localizacao extends MainActivity implements ChildEventListener {
     public void onCancelled(FirebaseError firebaseError) {
 
     }
+
+    */
 }
