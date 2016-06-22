@@ -3,16 +3,12 @@ package br.com.tiradividas.activityes;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
 
-/**
- * Created by daniel on 13/06/16.
- */
 
 abstract public class CommonActivity extends AppCompatActivity {
 

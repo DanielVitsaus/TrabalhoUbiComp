@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.view.Window;
 import android.view.WindowManager;
 
-import br.com.tiradividas.activityes.Forum;
 import br.com.tiradividas.activityes.LoginActivity;
 
 /**

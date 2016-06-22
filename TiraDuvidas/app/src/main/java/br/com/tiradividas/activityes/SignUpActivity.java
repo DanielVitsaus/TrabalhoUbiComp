@@ -25,7 +25,6 @@ public class SignUpActivity extends CommonActivity {
     private EditText idade;
     private EditText mat_dif;
     private EditText mat_dom;
-    private Local local;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +32,6 @@ public class SignUpActivity extends CommonActivity {
         setContentView(R.layout.activity_sign_up);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        local = new Local(this);
 
         Button cadastra = (Button) findViewById(R.id.buttom_cadas);
 
@@ -97,11 +94,7 @@ public class SignUpActivity extends CommonActivity {
                     @Override
                     public void onSuccess(Map<String, Object> stringObjectMap) {
                         user.setId( stringObjectMap.get("uid").toString() );
-                        //showToast(local.formatNumber(local.getDistancia()));
-                        user.setLatitude(String.valueOf(local.getLatitude()));
-                        user.setLogetude(String.valueOf(local.getLogetude()));
                         user.saveDB();
-                        local.pararConexaoComGoogleApi();
                         firebase.unauth();
 
                         showToast( "Conta criada com sucesso!" );

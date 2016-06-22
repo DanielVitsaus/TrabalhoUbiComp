@@ -30,9 +30,16 @@ import br.com.tiradividas.util.LibraryClass;
 public class ChatActivity extends ListActivity {
 
     private String mUsername;
+    private String idChat;
+    private String idamigo;
+    private String iduser;
     private Firebase mFirebaseRef;
+    private Firebase firebase;
     private ValueEventListener mConnectedListener;
     private ChatListAdapter mChatListAdapter;
+    private Bundle dados;
+
+    private static final String KEY_CHAT = "ChatPrefs";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,12 +47,26 @@ public class ChatActivity extends ListActivity {
 
         setContentView(R.layout.acticity_chat);
 
+        Intent intent = getIntent();
+        dados = intent.getExtras();
+
         // Make sure we have a mUsername
         setupUsername();
 
         setTitle("Chatting as " + mUsername);
+        if (dados.getString("iduser") != null) {
+            //iduser = dados.getString("iduser").subSequence(0, 10).toString();
+            iduser = dados.getString("iduser");
+        }
 
-        mFirebaseRef = LibraryClass.getFirebase_chat().child("chat");
+        if (dados.getString("idchat") != null) {
+            //idamigo = dados.getString("idamigo").subSequence(0,10).toString();
+            idChat = dados.getString("idchat");
+        }
+
+        //idChat = idamigo;
+
+        mFirebaseRef = LibraryClass.getFirebase_chat().child("chat").child(idChat);
 
         EditText inputText = (EditText) findViewById(R.id.messageInput);
         inputText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -109,17 +130,16 @@ public class ChatActivity extends ListActivity {
     }
 
     private void setupUsername() {
-        SharedPreferences prefs = getApplication().getSharedPreferences("ChatPrefs", 0);
-        mUsername = prefs.getString("username", null);
+        //LibraryClass.saveSP(this, KEY_CHAT, mUsername);
+        //SharedPreferences prefs = getApplication().getSharedPreferences("ChatPrefs", 0);
+        mUsername = LibraryClass.getSP(this,KEY_CHAT);
         String[] part = null;
-        if (mUsername == null) {
+        if (mUsername.isEmpty()) {
             Random r = new Random();
-            Intent intent = getIntent();
-            Bundle dados = intent.getExtras();
             // Assign a random user name if we don't have one saved.
             part = dados.getString("nome").split(" ");
             mUsername = part[0] +"_"+ r.nextInt(100000);
-            prefs.edit().putString("username", mUsername).apply();
+            LibraryClass.saveSP(this, KEY_CHAT, mUsername);
         }
     }
 

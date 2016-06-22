@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.firebase.client.Firebase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import br.com.tiradividas.util.LibraryClass;
@@ -28,9 +30,9 @@ public class User {
     private String materia_dificuldade;
     private String id;
     private String id_foto;
-    private ArrayList<String> ids_post;
+    private List<String> lista_chat;
     private String latitude;
-    private String logetude;
+    private String longetude;
 
     public static User newUser(){
         if (user == null){
@@ -40,6 +42,7 @@ public class User {
     }
 
     public User() {
+        this.lista_chat = new ArrayList<>();
     }
 
     public String getNome() {
@@ -157,16 +160,22 @@ public class User {
         this.id_foto = id_foto;
     }
 
-    public ArrayList<String> getIds_post() {
-        return ids_post;
+
+    public List<String> getLista_chat() {
+        return lista_chat;
     }
 
-    public void setIds_post(ArrayList<String> ids_post) {
-        this.ids_post = ids_post;
+    public void setLista_chat(List<String> lista_chat) {
+        this.lista_chat = lista_chat;
     }
 
     public void clearIdsPosts(){
-        this.ids_post.clear();
+        this.lista_chat.clear();
+    }
+
+    public void addIdChat(String chat){
+        //this.lista_chat = new ArrayList<>();
+        this.lista_chat.add(chat);
     }
 
     @Override
@@ -192,12 +201,12 @@ public class User {
         this.latitude = latitude;
     }
 
-    public String getLogetude() {
-        return logetude;
+    public String getLongetude() {
+        return longetude;
     }
 
-    public void setLogetude(String logetude) {
-        this.logetude = logetude;
+    public void setLongetude(String longetude) {
+        this.longetude = longetude;
     }
 
 
@@ -217,5 +226,14 @@ public class User {
         firebase.setValue( this );
     }
 
+    public void updateListaChat(){
+        Firebase firebase =  LibraryClass.getFirebase();
+        firebase = firebase.child("users").child( getId() );
+
+        Map<String, Object > map = new HashMap<>();
+        map.put("lista_chat", getLista_chat());
+
+        firebase.updateChildren(map);
+    }
 
 }

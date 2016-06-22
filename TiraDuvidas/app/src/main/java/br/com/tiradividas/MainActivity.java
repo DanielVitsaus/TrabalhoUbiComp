@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     protected static final String TOKEN = "TOKEN";
+    private static final String KEY_CHAT = "ChatPrefs";
 
     @Override
     public void onBackPressed() {
@@ -88,6 +89,7 @@ public class MainActivity extends AppCompatActivity
             Firebase firebase = LibraryClass.getFirebase();
             firebase.unauth();
             LibraryClass.removeSP(this, TOKEN);
+            LibraryClass.removeSP(this, KEY_CHAT);
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             finish();

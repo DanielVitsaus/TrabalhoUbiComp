@@ -7,9 +7,7 @@ import com.firebase.client.Firebase;
 
 import br.com.tiradividas.Model.User;
 
-/**
- * Created by daniel on 13/06/16.
- */
+
 public final class LibraryClass {
     public static String PREF = "PREF";
     private static Firebase firebase;
@@ -60,4 +58,6 @@ public final class LibraryClass {
         SharedPreferences sp = context.getSharedPreferences(PREF, Context.MODE_PRIVATE);
         sp.edit().remove(key).apply();
     }
+
+
 }

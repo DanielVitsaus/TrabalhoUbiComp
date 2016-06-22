@@ -15,6 +15,7 @@ import com.firebase.client.Firebase;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.SphericalUtil;
@@ -24,22 +25,21 @@ import java.util.Map;
 
 import br.com.tiradividas.Model.User;
 
-/**
- * Created by danielcandido on 16/06/16.
- */
-public class Local implements GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener,LocationListener {
+public class Local implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
+        LocationListener {
 
     private GoogleApiClient mGoogleApiClient;
     private final int MY_LOCATION_REQUEST_CODE = 1;
     private Activity activity;
     private double distancia;
     private double latitude;
-    private double logetude;
+    private double longetude;
     private Location location;
     private Bundle bundle;
     private Firebase firebase;
     private User user;
     private Map<String, Object> map;
+    private LocationRequest locationRequest;
 
 
     public Local(Activity activity) {
@@ -50,6 +50,7 @@ public class Local implements GoogleApiClient.ConnectionCallbacks,GoogleApiClien
         user = LibraryClass.getUser();
 
         firebase = firebase.child("users").child(user.getId());
+
     }
 
     private synchronized void callConnection() {
@@ -69,7 +70,8 @@ public class Local implements GoogleApiClient.ConnectionCallbacks,GoogleApiClien
         Log.i("LOG", "onConnected(" + bundle + ")");
 
 
-        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -77,25 +79,29 @@ public class Local implements GoogleApiClient.ConnectionCallbacks,GoogleApiClien
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
-            return ;
+            return;
         }
         location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
-        if(location != null){
+        if (location != null) {
             latitude = location.getLatitude();
-            logetude = location.getLongitude();
-            Log.i("LOG", "latitude: "+latitude);
-            Log.i("LOG", "longitude: "+logetude);
+            longetude = location.getLongitude();
+            Log.i("LOG", "latitude: " + latitude);
+            Log.i("LOG", "longitude: " + longetude);
 
             map.put("latitude", String.valueOf(location.getLatitude()));
-            map.put("logetude", String.valueOf(location.getLongitude()));
+            map.put("longetude", String.valueOf(location.getLongitude()));
 
             firebase.updateChildren(map);
 
-            //LatLng posicaoInicial = new LatLng(latitude,logetude);
+            //LatLng posicaoInicial = new LatLng(latitude,longetude);
             //LatLng posicaiFinal = new LatLng(-21.774414,-43.380779);
             //distancia = SphericalUtil.computeDistanceBetween(posicaoInicial, posicaiFinal);
         }
+
+        //if (mRequestingLocationUpdates) {
+            startLocationUpdates();
+        //}
 
     }
 
@@ -106,20 +112,42 @@ public class Local implements GoogleApiClient.ConnectionCallbacks,GoogleApiClien
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.i("LOG", "onConnectionFailed("+connectionResult+")");
+        Log.i("LOG", "onConnectionFailed(" + connectionResult + ")");
         pararConexaoComGoogleApi();
     }
 
     @Override
     public void onLocationChanged(Location location) {
 
-        Log.i("LOG", "latitude: "+location.getLatitude());
-        Log.i("LOG", "longitude: "+location.getLongitude());
+        Log.i("LOG", "latitude: " + location.getLatitude());
+        Log.i("LOG", "longitude: " + location.getLongitude());
 
         map.put("latitude", String.valueOf(location.getLatitude()));
-        map.put("logentude", String.valueOf(location.getLongitude()));
+        map.put("longetude", String.valueOf(location.getLongitude()));
 
         firebase.updateChildren(map);
+
+    }
+
+    public void startLocationUpdates() {
+
+        locationRequest = LocationRequest.create();
+
+        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        LocationServices.FusedLocationApi.
+                requestLocationUpdates(
+                        mGoogleApiClient, locationRequest, this);
+
 
     }
 
@@ -157,7 +185,8 @@ public class Local implements GoogleApiClient.ConnectionCallbacks,GoogleApiClien
     }
 
     public Location getLocation() {
-        this.onConnected(this.bundle);
+
+        //this.onConnected(this.bundle);
         return location;
     }
 
@@ -181,12 +210,12 @@ public class Local implements GoogleApiClient.ConnectionCallbacks,GoogleApiClien
         this.latitude = latitude;
     }
 
-    public double getLogetude() {
-        return logetude;
+    public double getLongetude() {
+        return longetude;
     }
 
-    public void setLogetude(double logetude) {
-        this.logetude = logetude;
+    public void setLongetude(double longetude) {
+        this.longetude = longetude;
     }
 
 

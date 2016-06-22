@@ -7,11 +7,11 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+
 import br.com.tiradividas.Model.User;
 import br.com.tiradividas.R;
 import br.com.tiradividas.util.LibraryClass;
