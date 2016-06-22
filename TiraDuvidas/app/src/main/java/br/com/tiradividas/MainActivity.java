@@ -22,7 +22,8 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     protected static final String TOKEN = "TOKEN";
-    private static final String KEY_CHAT = "ChatPrefs";
+    protected static final String KEY_CHAT = "ChatPrefs";
+    protected static final String IDUSER = "IDUSER";
 
     @Override
     public void onBackPressed() {

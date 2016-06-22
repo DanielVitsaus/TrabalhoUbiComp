@@ -18,6 +18,8 @@ import br.com.tiradividas.util.LibraryClass;
 
 public class LoginActivity extends CommonActivity {
 
+    private static final String IDUSER = "IDUSER";
+
     private User user;
     private AutoCompleteTextView email;
     private EditText senha;
@@ -61,6 +63,7 @@ public class LoginActivity extends CommonActivity {
 
     protected void initUser(){
         user = LibraryClass.getUser();
+        user.setId(LibraryClass.getSP(LoginActivity.this, IDUSER));
         user.setEmail( email.getText().toString() );
         user.setSenha( senha.getText().toString() );
     }
@@ -87,7 +90,8 @@ public class LoginActivity extends CommonActivity {
     private void verifyUserLogged(){
         initUser();
         if( firebase.getAuth() != null ){
-            user.setId(firebase.child("user").getAuth().getUid());
+            LibraryClass.saveSP(LoginActivity.this, IDUSER , firebase.getAuth().getUid());
+            user.setId(firebase.getAuth().getUid());
             callMainActivity();
         }
         else{
@@ -99,6 +103,7 @@ public class LoginActivity extends CommonActivity {
                             @Override
                             public void onAuthenticated(AuthData authData) {
                                 user.saveTokenSP( LoginActivity.this, authData.getToken() );
+                                LibraryClass.saveSP(LoginActivity.this, IDUSER , authData.getUid());
                                 user.setId(authData.getUid());
                                 callMainActivity();
                             }
@@ -119,6 +124,7 @@ public class LoginActivity extends CommonActivity {
                     @Override
                     public void onAuthenticated(AuthData authData) {
                         user.saveTokenSP( LoginActivity.this, authData.getToken() );
+                        LibraryClass.saveSP(LoginActivity.this, IDUSER , authData.getUid());
                         user.setId(authData.getUid());
                         closeProgressBar();
                         callMainActivity();

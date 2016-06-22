@@ -19,6 +19,8 @@ import br.com.tiradividas.util.Local;
 
 public class SignUpActivity extends CommonActivity {
 
+    private static final String IDUSER = "IDUSER";
+
     private User user;
     private EditText name;
     private EditText escolaridade;
@@ -93,6 +95,7 @@ public class SignUpActivity extends CommonActivity {
                 new Firebase.ValueResultHandler<Map<String, Object>>() {
                     @Override
                     public void onSuccess(Map<String, Object> stringObjectMap) {
+                        LibraryClass.saveSP(SignUpActivity.this, IDUSER , stringObjectMap.get("uid").toString());
                         user.setId( stringObjectMap.get("uid").toString() );
                         user.saveDB();
                         firebase.unauth();

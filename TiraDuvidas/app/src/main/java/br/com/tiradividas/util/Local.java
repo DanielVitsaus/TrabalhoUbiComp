@@ -42,14 +42,14 @@ public class Local implements GoogleApiClient.ConnectionCallbacks, GoogleApiClie
     private LocationRequest locationRequest;
 
 
-    public Local(Activity activity) {
+    public Local(Activity activity, User user) {
         this.activity = activity;
         callConnection();
         map = new HashMap<>();
         firebase = LibraryClass.getFirebase();
-        user = LibraryClass.getUser();
+        this.user = user;
 
-        firebase = firebase.child("users").child(user.getId());
+        firebase = firebase.child("users").child(this.user.getId());
 
     }
 

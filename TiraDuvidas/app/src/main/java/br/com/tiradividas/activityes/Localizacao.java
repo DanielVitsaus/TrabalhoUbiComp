@@ -51,10 +51,12 @@ public class Localizacao extends MainActivity {
         setSupportActionBar(toolbar);
 
         recyclerView = (RecyclerView) findViewById(R.id.lista);
-        local = new Local(this);
+        user = LibraryClass.getUser();
+
+        local = new Local(this,user);
 
         users = new ArrayList<>();
-        user = LibraryClass.getUser();
+
 
         firebase = LibraryClass.getFirebase().child("users");
 

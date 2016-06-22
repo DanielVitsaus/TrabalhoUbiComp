@@ -34,12 +34,6 @@ public class User {
     private String latitude;
     private String longetude;
 
-    public static User newUser(){
-        if (user == null){
-            user = new User();
-        }
-        return  ( user );
-    }
 
     public User() {
         this.lista_chat = new ArrayList<>();
