@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,122 +9,93 @@
     tools:context="br.com.tiradividas.activityes.SignUpActivity"
     tools:showIn="@layout/activity_sign_up">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:orientation="horizontal"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/layout_nome"
             android:layout_marginLeft="6dp"
-            android:layout_marginRight="6dp">
+            android:layout_marginRight="6dp"
+            android:id="@+id/layout_nome">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Nome:"
-                android:id="@+id/text_cadas_nome"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="4dp"
-                android:textSize="18sp"
-                android:textColor="#000000"
-                android:typeface="serif"
-                android:textStyle="bold" />
-
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                android:ems="10"
+            <AutoCompleteTextView
                 android:id="@+id/edit_casda_nome"
-                android:hint="Nome " />
-        </LinearLayout>
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName|textAutoCorrect|textCapCharacters"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textSize="16sp"
+                android:hint="nome"
+                android:imeOptions="actionNext"/>
 
-        <LinearLayout
-            android:orientation="horizontal"
+        </android.support.design.widget.TextInputLayout>
+
+
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/layout_email"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
             android:layout_below="@+id/layout_nome"
-            android:layout_marginLeft="6dp"
-            android:layout_marginRight="6dp">
+            android:id="@+id/layout_email">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="E-mail:"
-                android:id="@+id/text_cadas_email"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="4dp"
-                android:textSize="18sp"
-                android:textColor="#000000"
-                android:typeface="serif"
-                android:textStyle="bold" />
-
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ems="10"
+            <AutoCompleteTextView
                 android:id="@+id/edit_cadas_email"
-                android:hint="e-mail"
-                android:inputType="textEmailAddress" />
-        </LinearLayout>
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:hint="email"
+                android:textSize="16sp"
+                android:imeOptions="actionNext"/>
 
-        <LinearLayout
-            android:orientation="horizontal"
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/layout_escolaridade"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
             android:layout_below="@+id/layout_email"
-            android:layout_marginLeft="6dp"
-            android:layout_marginRight="6dp">
+            android:id="@+id/layout_escolaridade">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <AutoCompleteTextView
+                android:id="@+id/edit_cadas_escolaridade"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Escolaridade:"
-                android:id="@+id/text_cadas_escolaridade"
-                android:textSize="18sp"
-                android:textColor="#000000"
-                android:textStyle="bold"
-                android:typeface="serif" />
+                android:hint="escolaridade"
+                android:inputType="textAutoCorrect|textCapCharacters"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textSize="16sp"
+                android:imeOptions="actionNext"/>
 
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="text"
-                android:ems="10"
-                android:id="@+id/edit_cadas_escolaridade" />
-        </LinearLayout>
+        </android.support.design.widget.TextInputLayout>
 
-        <LinearLayout
-            android:orientation="horizontal"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/layout_idade"
-            android:layout_below="@+id/layout_escolaridade"
             android:layout_marginLeft="6dp"
-            android:layout_marginRight="6dp">
+            android:layout_marginRight="6dp"
+            android:layout_below="@+id/layout_escolaridade"
+            android:id="@+id/layout_idade">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Idade:"
-                android:id="@+id/text_cadas_idade"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="4dp"
-                android:textSize="18sp"
-                android:textColor="#000000"
-                android:typeface="serif"
-                android:textStyle="bold" />
-
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ems="10"
+            <AutoCompleteTextView
                 android:id="@+id/edit_cadas_idade"
-                android:hint="Idade"
-                android:inputType="number" />
-        </LinearLayout>
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="idade"
+                android:inputType="textAutoCorrect|textCapCharacters"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textSize="16sp"
+                android:imeOptions="actionNext"/>
+
+        </android.support.design.widget.TextInputLayout>
 
         <LinearLayout
             android:orientation="vertical"
@@ -141,20 +113,17 @@
                 android:id="@+id/text_cadas_mat_dif"
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="4dp"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textColor="#000000"
                 android:typeface="serif"
-                android:textStyle="bold"
-                android:layout_marginTop="5dp" />
+                android:layout_marginTop="6dp" />
 
-            <EditText
-                android:layout_width="match_parent"
+            <Spinner
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:id="@+id/edit_cadas_mat_dif"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:inputType="text" />
+                android:id="@+id/spinner_mat_dif"
+                android:drawSelectorOnTop="true"/>
+
         </LinearLayout>
 
         <LinearLayout
@@ -173,76 +142,65 @@
                 android:id="@+id/text_cadas_mat_dom"
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="4dp"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textColor="#000000"
                 android:typeface="serif"
-                android:textStyle="bold"
-                android:layout_marginTop="5dp" />
+                android:layout_marginTop="6dp" />
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text"
-                android:ems="10"
-                android:id="@+id/edit_cadas_mat_dom"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/layout_senha"
-            android:layout_below="@+id/layout_mat_domi"
-            android:layout_marginLeft="6dp"
-            android:layout_marginRight="6dp">
-
-            <TextView
+            <Spinner
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Senha:"
-                android:id="@+id/text_cadas_senha"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="4dp"
-                android:textSize="18sp"
-                android:textColor="#000000"
-                android:typeface="serif"
-                android:textStyle="bold" />
+                android:id="@+id/spinner_mat_dom"
+                android:drawSelectorOnTop="true"/>
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPassword|text"
-                android:ems="10"
-                android:id="@+id/edit_cadas_senha"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="10dp" />
         </LinearLayout>
 
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:layout_below="@+id/layout_mat_domi"
+            android:id="@+id/layout_senha">
+
+            <AutoCompleteTextView
+                android:id="@+id/edit_cadas_senha"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="senha"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textSize="16sp"
+                android:inputType="textPassword"
+                android:imeOptions="actionNext"/>
+
+        </android.support.design.widget.TextInputLayout>
+
         <Button
-            android:layout_width="300dp"
-            android:layout_height="60dp"
-            android:text="Cadastrar"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:text="cadastrar"
             android:id="@+id/buttom_cadas"
             android:layout_below="@+id/layout_senha"
             android:layout_centerInParent="true"
-            android:layout_marginTop="5dp"
             android:textColor="#000000"
             android:textSize="20sp"
             android:typeface="serif"
-            android:textStyle="bold" />
+            android:layout_marginTop="5dp" />
 
         <ProgressBar
             android:layout_alignParentBottom="true"
             android:id="@+id/sign_up_progress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
             android:visibility="gone"
-            android:layout_below="@+id/layout_senha"
-            android:layout_centerHorizontal="true" />
+            android:layout_below="@+id/buttom_cadas"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:progressDrawable="@color/colorAccent"
+            style="?android:attr/progressBarStyleHorizontal" />
 
 
+    </RelativeLayout>
 
-</RelativeLayout>
+</ScrollView>

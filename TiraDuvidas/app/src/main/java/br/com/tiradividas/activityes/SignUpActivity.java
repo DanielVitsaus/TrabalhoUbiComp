@@ -3,9 +3,13 @@ package br.com.tiradividas.activityes;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -22,11 +26,16 @@ public class SignUpActivity extends CommonActivity {
     private static final String IDUSER = "IDUSER";
 
     private User user;
-    private EditText name;
-    private EditText escolaridade;
-    private EditText idade;
-    private EditText mat_dif;
-    private EditText mat_dom;
+    private AutoCompleteTextView name;
+    private AutoCompleteTextView escolaridade;
+    private AutoCompleteTextView idade;
+    private String matDIF;
+    private String matDOM;
+    private Spinner mat_dif;
+    private Spinner mat_dom;
+
+    private String[] matetias = new String[]{"Cálculo I", "Cálculo II", "Cálculo III","Física I","Física II" ,"Física III", "Algoritmo", "Química"};
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +44,12 @@ public class SignUpActivity extends CommonActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        mat_dif = (Spinner) findViewById(R.id.spinner_mat_dif);
+        mat_dom = (Spinner) findViewById(R.id.spinner_mat_dom);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, matetias);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+
         Button cadastra = (Button) findViewById(R.id.buttom_cadas);
 
         if (cadastra != null) {
@@ -42,6 +57,38 @@ public class SignUpActivity extends CommonActivity {
                 @Override
                 public void onClick(View v) {
                     sendSignUpData();
+                }
+            });
+        }
+
+        if(mat_dom != null){
+            mat_dom.setAdapter(adapter);
+
+            mat_dom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    matDOM = matetias[position];
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+        }
+
+        if(mat_dif != null){
+            mat_dif.setAdapter(adapter);
+
+            mat_dif.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    matDIF = matetias[position];
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
                 }
             });
         }
@@ -62,13 +109,11 @@ public class SignUpActivity extends CommonActivity {
     }
 
     protected void initViews(){
-        name = (EditText) findViewById(R.id.edit_casda_nome);
-        email = (EditText) findViewById(R.id.edit_cadas_email);
-        escolaridade = (EditText) findViewById(R.id.edit_cadas_escolaridade);
-        idade = (EditText) findViewById(R.id.edit_cadas_idade);
-        mat_dif = (EditText) findViewById(R.id.edit_cadas_mat_dif);
-        mat_dom = (EditText) findViewById(R.id.edit_cadas_mat_dom);
-        password = (EditText) findViewById(R.id.edit_cadas_senha);
+        name = (AutoCompleteTextView) findViewById(R.id.edit_casda_nome);
+        email = (AutoCompleteTextView) findViewById(R.id.edit_cadas_email);
+        escolaridade = (AutoCompleteTextView) findViewById(R.id.edit_cadas_escolaridade);
+        idade = (AutoCompleteTextView) findViewById(R.id.edit_cadas_idade);
+        password = (AutoCompleteTextView) findViewById(R.id.edit_cadas_senha);
         progressBar = (ProgressBar) findViewById(R.id.sign_up_progress);
     }
 
@@ -78,8 +123,8 @@ public class SignUpActivity extends CommonActivity {
         user.setEmail( email.getText().toString() );
         user.setEscolaridade( escolaridade.getText().toString());
         user.setIdade( idade.getText().toString());
-        user.setMateria_dificuldade(mat_dif.getText().toString());
-        user.setMateria_domoinio(mat_dom.getText().toString());
+        user.setMateria_dificuldade(matDIF);
+        user.setMateria_domoinio(matDOM);
         user.setSenha( password.getText().toString() );
     }
 
