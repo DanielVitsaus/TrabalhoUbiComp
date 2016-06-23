@@ -15,24 +15,25 @@ import java.util.List;
 
 import br.com.tiradividas.Model.User;
 import br.com.tiradividas.R;
+import br.com.tiradividas.activityes.Localizacao;
 import br.com.tiradividas.chat.ChatActivity;
 import br.com.tiradividas.util.Local;
 
-/**
- * Created by daniel on 16/06/16.
- */
+
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     private List<User> users;
     private Local local;
     private User user;
     private Context context;
+    private Localizacao localizacao;
 
-    public UserAdapter(Context context, User user, List<User> users, Local local) {
+    public UserAdapter(Localizacao localizacao, User user, List<User> users, Local local) {
         this.users = users;
         this.local = local;
         this.user = user;
-        this.context = context;
+        this.context = localizacao.getBaseContext();
+        this.localizacao = localizacao;
     }
 
     @Override
@@ -57,8 +58,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             @Override
             public void onClick(View v) {
 
-                boolean chat1 = false;
-                boolean chat2 = false;
+                local.pararConexaoComGoogleApi();
                 Intent intent = new Intent(context, ChatActivity.class);
                 String idChat = user.getId() +"_"+ users.get(position).getId();
                 String idChat2 = users.get(position).getId() +"_"+ user.getId();
@@ -86,8 +86,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                 intent.putExtra("nome", user.getNome());
                 intent.putExtra("iduser", user.getId());
 
-                context.startActivity(intent);
+                localizacao.startActivity(intent);
                 Toast.makeText(context, "Deu certo", Toast.LENGTH_LONG).show();
+                localizacao.finish();
             }
         });
 

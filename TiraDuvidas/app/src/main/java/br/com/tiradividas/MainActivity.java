@@ -7,6 +7,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.firebase.client.Firebase;
 
@@ -26,6 +27,13 @@ public class MainActivity extends AppCompatActivity
     protected static final String IDUSER = "IDUSER";
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        TextView nome = (TextView) findViewById(R.id.nomeuser);
+        TextView email = (TextView) findViewById(R.id.emailuser);
+    }
+
+    @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer != null) {
@@ -33,6 +41,7 @@ public class MainActivity extends AppCompatActivity
                 drawer.closeDrawer(GravityCompat.START);
             } else {
                 super.onBackPressed();
+                finish();
             }
         }
     }
@@ -91,6 +100,7 @@ public class MainActivity extends AppCompatActivity
             firebase.unauth();
             LibraryClass.removeSP(this, TOKEN);
             LibraryClass.removeSP(this, KEY_CHAT);
+            LibraryClass.removeSP(this, IDUSER);
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             finish();

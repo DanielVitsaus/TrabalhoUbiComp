@@ -1,6 +1,5 @@
 package br.com.tiradividas.activityes;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -26,7 +25,6 @@ import br.com.tiradividas.R;
 import br.com.tiradividas.adapter.UserAdapter;
 import br.com.tiradividas.adapter.UserRecyclerAdapter;
 import br.com.tiradividas.adapter.UserViewHolder;
-import br.com.tiradividas.chat.ChatActivity;
 import br.com.tiradividas.util.LibraryClass;
 import br.com.tiradividas.util.Local;
 
@@ -62,6 +60,15 @@ public class Localizacao extends MainActivity {
 
         fab = (FloatingActionButton) findViewById(R.id.fab_chat);
 
+        if (fab != null) {
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //local.MyLocation();
+                    //initUserAdapte(users);
+                }
+            });
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -125,20 +132,6 @@ public class Localizacao extends MainActivity {
                 }
                 //initFirebaseAdapter();
                 initUserAdapte(users);
-                if (fab != null) {
-                    fab.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Bundle bundle = new Bundle();
-                            bundle.putString("nome", nomeU);
-                            Intent intent = new Intent(Localizacao.this, ChatActivity.class);
-                            intent.putExtra("nome", nomeU);
-                            startActivity(intent);
-                            //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                            //       .setAction("Action", null).show();
-                        }
-                    });
-                }
             }
 
             @Override
@@ -153,8 +146,7 @@ public class Localizacao extends MainActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        users.clear();
-
+        //users.clear();
     }
 
     @Override

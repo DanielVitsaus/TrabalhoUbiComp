@@ -1,10 +1,10 @@
 package br.com.tiradividas.chat;
 
-import android.app.ListActivity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.DataSetObserver;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -22,12 +22,11 @@ import java.util.Random;
 
 import br.com.tiradividas.Model.Chat;
 import br.com.tiradividas.R;
+import br.com.tiradividas.activityes.Localizacao;
 import br.com.tiradividas.util.LibraryClass;
 
-/**
- * Created by daniel on 16/06/16.
- */
-public class ChatActivity extends ListActivity {
+
+public class ChatActivity extends AppCompatActivity {
 
     private String mUsername;
     private String idChat;
@@ -47,13 +46,17 @@ public class ChatActivity extends ListActivity {
 
         setContentView(R.layout.acticity_chat);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         Intent intent = getIntent();
         dados = intent.getExtras();
 
         // Make sure we have a mUsername
         setupUsername();
 
-        setTitle("Chatting as " + mUsername);
+        //setTitle("Chatting as " + mUsername);
+        setTitle("CHAT");
         if (dados.getString("iduser") != null) {
             //iduser = dados.getString("iduser").subSequence(0, 10).toString();
             iduser = dados.getString("iduser");
@@ -91,7 +94,7 @@ public class ChatActivity extends ListActivity {
     public void onStart() {
         super.onStart();
         // Setup our view and list adapter. Ensure it scrolls to the bottom as data changes
-        final ListView listView = getListView();
+        final ListView listView = (ListView) findViewById(R.id.list);//getListView();
         // Tell our list adapter that we only want 50 messages at a time
         mChatListAdapter = new ChatListAdapter(mFirebaseRef.limitToLast(5000), this, R.layout.chat_message, mUsername);
         listView.setAdapter(mChatListAdapter);
@@ -153,5 +156,13 @@ public class ChatActivity extends ListActivity {
             mFirebaseRef.push().setValue(chat);
             inputText.setText("");
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(this, Localizacao.class);
+        startActivity(intent);
+        finish();
     }
 }

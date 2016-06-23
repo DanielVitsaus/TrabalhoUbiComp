@@ -81,6 +81,7 @@ public class Local implements GoogleApiClient.ConnectionCallbacks, GoogleApiClie
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
+
         location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
         if (location != null) {
@@ -94,14 +95,8 @@ public class Local implements GoogleApiClient.ConnectionCallbacks, GoogleApiClie
 
             firebase.updateChildren(map);
 
-            //LatLng posicaoInicial = new LatLng(latitude,longetude);
-            //LatLng posicaiFinal = new LatLng(-21.774414,-43.380779);
-            //distancia = SphericalUtil.computeDistanceBetween(posicaoInicial, posicaiFinal);
-        }
-
-        //if (mRequestingLocationUpdates) {
             startLocationUpdates();
-        //}
+        }
 
     }
 
@@ -131,7 +126,11 @@ public class Local implements GoogleApiClient.ConnectionCallbacks, GoogleApiClie
 
     public void startLocationUpdates() {
 
-        locationRequest = LocationRequest.create();
+        locationRequest = new LocationRequest(); //LocationRequest.create();
+        locationRequest.setInterval(5000);
+        locationRequest.setFastestInterval(2500);
+        //locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -144,11 +143,7 @@ public class Local implements GoogleApiClient.ConnectionCallbacks, GoogleApiClie
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        LocationServices.FusedLocationApi.
-                requestLocationUpdates(
-                        mGoogleApiClient, locationRequest, this);
-
-
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, locationRequest, this);
     }
 
     private void stopLocationUpdates() {

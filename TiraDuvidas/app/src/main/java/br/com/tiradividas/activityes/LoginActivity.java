@@ -2,15 +2,20 @@ package br.com.tiradividas.activityes;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.realtime.util.StringListReader;
+
+import java.util.Map;
 
 import br.com.tiradividas.Model.User;
 import br.com.tiradividas.R;
@@ -19,6 +24,7 @@ import br.com.tiradividas.util.LibraryClass;
 public class LoginActivity extends CommonActivity {
 
     private static final String IDUSER = "IDUSER";
+    private static final String NOME = "NOME";
 
     private User user;
     private AutoCompleteTextView email;
@@ -126,6 +132,8 @@ public class LoginActivity extends CommonActivity {
                         user.saveTokenSP( LoginActivity.this, authData.getToken() );
                         LibraryClass.saveSP(LoginActivity.this, IDUSER , authData.getUid());
                         user.setId(authData.getUid());
+                        Map<String, Object> nome  = authData.getProviderData();
+                        Log.i("log", nome.toString());
                         closeProgressBar();
                         callMainActivity();
                     }

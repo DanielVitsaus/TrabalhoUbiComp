@@ -1,41 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    tools:context=".chat.ChatActivity"
-    android:background="#dcdcdc">
 
-    <ListView
-        android:id="@android:id/list"
+<android.support.design.widget.CoordinatorLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fitsSystemWindows="true"
+    tools:context=".activityes.Forum"
+    android:id="@+id/too">
+
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/listFooter"
-        android:layout_alignParentTop="true"
-        android:transcriptMode="alwaysScroll" />
+        android:theme="@style/AppTheme.AppBarOverlay">
 
-    <LinearLayout
-        android:id="@+id/listFooter"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal">
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-        <EditText
-            android:id="@+id/messageInput"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:inputType="textShortMessage"
-            android:lines="1"
-            android:singleLine="true" />
+    </android.support.design.widget.AppBarLayout>
 
-        <ImageButton
-            android:id="@+id/sendButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_menu_send" />
-    </LinearLayout>
 
+</android.support.design.widget.CoordinatorLayout>
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/fra"
+        android:layout_below="@+id/too">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/imageView33"
+            android:background="@drawable/background2"
+            android:alpha=".2" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/listFooter"
+                android:layout_alignParentTop="true"
+                android:transcriptMode="alwaysScroll"
+                android:headerDividersEnabled="false"
+                android:id="@+id/list" />
+
+            <LinearLayout
+                android:id="@+id/listFooter"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/messageInput"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:inputType="textShortMessage"
+                    android:lines="1"
+                    android:singleLine="true" />
+
+                <ImageButton
+                    android:id="@+id/sendButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@android:drawable/ic_menu_send" />
+            </LinearLayout>
+        </RelativeLayout>
+
+    </FrameLayout>
 
 </RelativeLayout>
