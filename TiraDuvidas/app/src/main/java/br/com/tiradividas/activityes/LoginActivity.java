@@ -1,6 +1,9 @@
 package br.com.tiradividas.activityes;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -8,6 +11,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.firebase.client.AuthData;
@@ -31,6 +35,7 @@ public class LoginActivity extends CommonActivity {
     private EditText senha;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,9 +51,17 @@ public class LoginActivity extends CommonActivity {
             });
         }
 
-        firebase = LibraryClass.getFirebase();
-        initViews();
-        verifyUserLogged();
+        if (isConnectingToInternet()){
+            (findViewById(R.id.connected_net)).setVisibility(View.VISIBLE);
+            (findViewById(R.id.disconnected_net)).setVisibility(View.INVISIBLE);
+            firebase = LibraryClass.getFirebase();
+            initViews();
+            verifyUserLogged();
+        }else {
+            (findViewById(R.id.connected_net)).setVisibility(View.INVISIBLE);
+            (findViewById(R.id.disconnected_net)).setVisibility(View.VISIBLE);
+        }
+
     }
 
    @Override
@@ -145,6 +158,12 @@ public class LoginActivity extends CommonActivity {
                     }
                 }
         );
+    }
+
+    public boolean isConnectingToInternet(){
+        ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
 }
