@@ -5,9 +5,12 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.TextView;
 
 import br.com.tiradividas.MainActivity;
 import br.com.tiradividas.R;
+import br.com.tiradividas.util.LibraryClass;
 
 public class Perfil extends MainActivity {
 
@@ -28,6 +31,9 @@ public class Perfil extends MainActivity {
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         if (navigationView != null) {
+            View view = navigationView.getHeaderView(0);
+            ((TextView)view.findViewById(R.id.nomeuser)).setText(LibraryClass.getUser().getNome());
+            ((TextView)view.findViewById(R.id.emailuser)).setText(LibraryClass.getUser().getEmail());
             navigationView.setNavigationItemSelectedListener(this);
         }
     }

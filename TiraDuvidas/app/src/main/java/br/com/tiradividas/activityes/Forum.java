@@ -7,12 +7,18 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import br.com.tiradividas.MainActivity;
+import br.com.tiradividas.Model.User;
 import br.com.tiradividas.R;
+import br.com.tiradividas.util.LibraryClass;
 
 public class Forum extends MainActivity {
+
+    private static User user = LibraryClass.getUser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +26,7 @@ public class Forum extends MainActivity {
         setContentView(R.layout.activity_forum);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         if (fab != null) {
@@ -36,12 +43,15 @@ public class Forum extends MainActivity {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         if (drawer != null) {
-            drawer.setDrawerListener(toggle);
+            drawer.addDrawerListener(toggle);
         }
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         if (navigationView != null) {
+            View view = navigationView.getHeaderView(0);
+            ((TextView)view.findViewById(R.id.nomeuser)).setText(user.getNome());
+            ((TextView)view.findViewById(R.id.emailuser)).setText(user.getEmail());
             navigationView.setNavigationItemSelectedListener(this);
         }
     }

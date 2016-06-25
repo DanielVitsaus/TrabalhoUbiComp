@@ -37,19 +37,18 @@ public class Local implements GoogleApiClient.ConnectionCallbacks, GoogleApiClie
     private Location location;
     private Bundle bundle;
     private Firebase firebase;
-    private User user;
     private Map<String, Object> map;
     private LocationRequest locationRequest;
 
 
-    public Local(Activity activity, User user) {
+    public Local(Activity activity) {
         this.activity = activity;
         callConnection();
         map = new HashMap<>();
         firebase = LibraryClass.getFirebase();
-        this.user = user;
+        User user = LibraryClass.getUser();
 
-        firebase = firebase.child("users").child(this.user.getId());
+        firebase = firebase.child("users").child(user.getId());
 
     }
 

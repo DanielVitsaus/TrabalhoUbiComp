@@ -3,6 +3,7 @@ package br.com.tiradividas.activityes;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -32,7 +34,7 @@ public class Localizacao extends MainActivity {
 
     private String nomeU = "UserChat";
     private Local local;
-    private User user;
+    private static User user;
     private static List<User> users;
     private UserRecyclerAdapter adapter;
     private UserAdapter myUserAdapter;
@@ -50,8 +52,6 @@ public class Localizacao extends MainActivity {
 
         recyclerView = (RecyclerView) findViewById(R.id.lista);
         user = LibraryClass.getUser();
-
-        local = new Local(this,user);
 
         users = new ArrayList<>();
 
@@ -80,6 +80,9 @@ public class Localizacao extends MainActivity {
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         if (navigationView != null) {
+            View view = navigationView.getHeaderView(0);
+            ((TextView)view.findViewById(R.id.nomeuser)).setText(LibraryClass.getUser().getNome());
+            ((TextView)view.findViewById(R.id.emailuser)).setText(LibraryClass.getUser().getEmail());
             navigationView.setNavigationItemSelectedListener(this);
         }
 
@@ -106,8 +109,10 @@ public class Localizacao extends MainActivity {
         recyclerView.setAdapter(myUserAdapter);
     }
 
+
     @Override
     protected void onStart() {
+        local = new Local(this);
         super.onStart();
 
         firebase.addValueEventListener(new ValueEventListener() {
@@ -144,16 +149,24 @@ public class Localizacao extends MainActivity {
     }
 
     @Override
+    protected void onPause() {
+        local.pararConexaoComGoogleApi();
+        super.onPause();
+    }
+
+    @Override
     protected void onStop() {
+        users.clear();
+        local.pararConexaoComGoogleApi();
         super.onStop();
         //users.clear();
     }
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         users.clear();
         local.pararConexaoComGoogleApi();
+        super.onDestroy();
     }
 
 

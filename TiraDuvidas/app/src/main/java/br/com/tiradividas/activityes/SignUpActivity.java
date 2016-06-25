@@ -24,8 +24,9 @@ import br.com.tiradividas.util.Local;
 public class SignUpActivity extends CommonActivity {
 
     private static final String IDUSER = "IDUSER";
+    private static final String EMAILUSER = "EMAILUSER";
 
-    private User user;
+    private static User user;
     private AutoCompleteTextView name;
     private AutoCompleteTextView escolaridade;
     private AutoCompleteTextView idade;
@@ -141,6 +142,7 @@ public class SignUpActivity extends CommonActivity {
                     @Override
                     public void onSuccess(Map<String, Object> stringObjectMap) {
                         LibraryClass.saveSP(SignUpActivity.this, IDUSER , stringObjectMap.get("uid").toString());
+                        LibraryClass.saveSP(SignUpActivity.this, EMAILUSER , user.getEmail());
                         user.setId( stringObjectMap.get("uid").toString() );
                         user.saveDB();
                         firebase.unauth();

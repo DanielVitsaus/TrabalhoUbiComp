@@ -15,8 +15,10 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.firebase.client.AuthData;
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.firebase.client.realtime.util.StringListReader;
 
 import java.util.Map;
@@ -24,15 +26,17 @@ import java.util.Map;
 import br.com.tiradividas.Model.User;
 import br.com.tiradividas.R;
 import br.com.tiradividas.util.LibraryClass;
+import br.com.tiradividas.util.Local;
 
 public class LoginActivity extends CommonActivity {
 
     private static final String IDUSER = "IDUSER";
     private static final String NOME = "NOME";
 
-    private User user;
+    private static User user;
     private AutoCompleteTextView email;
     private EditText senha;
+    private Local local;
 
 
 
@@ -40,6 +44,9 @@ public class LoginActivity extends CommonActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        user = LibraryClass.getUser();
+        firebase = LibraryClass.getFirebase();
 
         Button login = (Button) findViewById(R.id.email_sign_in_button);
         if (login != null) {
@@ -51,10 +58,10 @@ public class LoginActivity extends CommonActivity {
             });
         }
 
+
         if (isConnectingToInternet()){
             (findViewById(R.id.connected_net)).setVisibility(View.VISIBLE);
             (findViewById(R.id.disconnected_net)).setVisibility(View.INVISIBLE);
-            firebase = LibraryClass.getFirebase();
             initViews();
             verifyUserLogged();
         }else {
@@ -81,7 +88,6 @@ public class LoginActivity extends CommonActivity {
     }
 
     protected void initUser(){
-        user = LibraryClass.getUser();
         user.setId(LibraryClass.getSP(LoginActivity.this, IDUSER));
         user.setEmail( email.getText().toString() );
         user.setSenha( senha.getText().toString() );
@@ -101,20 +107,25 @@ public class LoginActivity extends CommonActivity {
 
 
     private void callMainActivity(){
+        if (user.getLatitude() == null && user.getLongetude() == null){
+            local = new Local(this);
+            local.pararConexaoComGoogleApi();
+        }
         Intent intent = new Intent( this, Forum.class );
         startActivity(intent);
         finish();
     }
 
     private void verifyUserLogged(){
-        initUser();
+
         if( firebase.getAuth() != null ){
+            //initUser();
             LibraryClass.saveSP(LoginActivity.this, IDUSER , firebase.getAuth().getUid());
             user.setId(firebase.getAuth().getUid());
             callMainActivity();
         }
         else{
-
+            //initUser();
             if( !user.getTokenSP(this).isEmpty() ){
                 firebase.authWithCustomToken(
                         user.getTokenSP(this),
