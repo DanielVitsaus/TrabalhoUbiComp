@@ -1,5 +1,6 @@
 package br.com.tiradividas.activityes;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -32,14 +33,13 @@ import br.com.tiradividas.util.Local;
 
 public class Localizacao extends MainActivity {
 
-    private String nomeU = "UserChat";
     private Local local;
     private static User user;
     private static List<User> users;
     private UserRecyclerAdapter adapter;
     private UserAdapter myUserAdapter;
     private RecyclerView recyclerView;
-    private FloatingActionButton fab;
+    private ProgressDialog dialog = null;
 
     private Firebase firebase;
 
@@ -58,17 +58,6 @@ public class Localizacao extends MainActivity {
 
         firebase = LibraryClass.getFirebase().child("users");
 
-        fab = (FloatingActionButton) findViewById(R.id.fab_chat);
-
-        if (fab != null) {
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //local.MyLocation();
-                    //initUserAdapte(users);
-                }
-            });
-        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -85,6 +74,12 @@ public class Localizacao extends MainActivity {
             ((TextView)view.findViewById(R.id.emailuser)).setText(LibraryClass.getUser().getEmail());
             navigationView.setNavigationItemSelectedListener(this);
         }
+
+        this.dialog = new ProgressDialog(this);
+        dialog.setMessage("Carregando...");
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+        dialog.show();
 
     }
 
@@ -107,6 +102,9 @@ public class Localizacao extends MainActivity {
         myUserAdapter = new UserAdapter(this, user,users, local);
         recyclerView.setLayoutManager(new LinearLayoutManager(Localizacao.this));
         recyclerView.setAdapter(myUserAdapter);
+        if (dialog.isShowing()) {
+            dialog.dismiss();
+        }
     }
 
 
@@ -125,14 +123,12 @@ public class Localizacao extends MainActivity {
                 for( DataSnapshot d : dataSnapshot.getChildren() ){
                     User u = d.getValue( User.class );
                     u.setId(d.getKey());
-                    if (user.getId().compareTo(u.getId()) != 0) {
-                        users.add(u);
+                    local.calculaDistancia(
+                            Double.valueOf(user.getLatitude()),Double.valueOf(user.getLongetude()),
+                            Double.valueOf(u.getLatitude()),Double.valueOf(u.getLongetude()));
 
-                    }
-                    else {
-                        user = u;
-                        nomeU = u.getNome();
-                        Log.i("log", u.toString());
+                    if (user.getId().compareTo(u.getId()) != 0 && local.getDistancia() < 100) {
+                        users.add(u);
                     }
                 }
                 //initFirebaseAdapter();

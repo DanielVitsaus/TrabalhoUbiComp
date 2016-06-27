@@ -1,5 +1,6 @@
 package br.com.tiradividas.activityes;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -37,6 +38,7 @@ public class LoginActivity extends CommonActivity {
     private AutoCompleteTextView email;
     private EditText senha;
     private Local local;
+    private ProgressDialog dialog = null;
 
 
 
@@ -100,7 +102,13 @@ public class LoginActivity extends CommonActivity {
 
 
     public void sendLoginData(){
-        openProgressBar();
+        //openProgressBar();
+        this.dialog = new ProgressDialog(this);
+        dialog.setMessage("Carregando...");
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+        dialog.show();
+
         initUser();
         verifyLogin();
     }
@@ -158,14 +166,22 @@ public class LoginActivity extends CommonActivity {
                         user.setId(authData.getUid());
                         Map<String, Object> nome  = authData.getProviderData();
                         Log.i("log", nome.toString());
-                        closeProgressBar();
+                        //closeProgressBar();
                         callMainActivity();
+                        if (dialog.isShowing()) {
+                            dialog.dismiss();
+                        }
+
                     }
 
                     @Override
                     public void onAuthenticationError(FirebaseError firebaseError) {
                         showSnackbar( firebaseError.getMessage() );
-                        closeProgressBar();
+                        //closeProgressBar();
+                        //dialog.setMessage(firebaseError.getMessage());
+                        if (dialog.isShowing()) {
+                            dialog.dismiss();
+                        }
                     }
                 }
         );

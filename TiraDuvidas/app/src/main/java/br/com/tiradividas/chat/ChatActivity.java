@@ -3,6 +3,7 @@ package br.com.tiradividas.chat;
 import android.content.Intent;
 import android.database.DataSetObserver;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
@@ -37,6 +38,7 @@ public class ChatActivity extends AppCompatActivity {
     private ValueEventListener mConnectedListener;
     private ChatListAdapter mChatListAdapter;
     private Bundle dados;
+    private String mId;
 
     private static final String KEY_CHAT = "ChatPrefs";
 
@@ -51,6 +53,8 @@ public class ChatActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         dados = intent.getExtras();
+
+        mId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
 
         // Make sure we have a mUsername
         setupUsername();
@@ -151,7 +155,7 @@ public class ChatActivity extends AppCompatActivity {
         String input = inputText.getText().toString();
         if (!input.equals("")) {
             // Create our 'model', a Chat object
-            Chat chat = new Chat(input, mUsername);
+            Chat chat = new Chat(input, mUsername, mId);
             // Create a new, auto-generated child of that chat location, and save our chat data there
             mFirebaseRef.push().setValue(chat);
             inputText.setText("");

@@ -1,5 +1,6 @@
 package br.com.tiradividas.activityes;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -34,6 +35,7 @@ public class SignUpActivity extends CommonActivity {
     private String matDOM;
     private Spinner mat_dif;
     private Spinner mat_dom;
+    private ProgressDialog dialog = null;
 
     private String[] matetias = new String[]{"Cálculo I", "Cálculo II", "Cálculo III","Física I","Física II" ,"Física III", "Algoritmo", "Química"};
 
@@ -130,7 +132,12 @@ public class SignUpActivity extends CommonActivity {
     }
 
     public void sendSignUpData(  ){
-        openProgressBar();
+        //openProgressBar();
+        this.dialog = new ProgressDialog(this);
+        dialog.setMessage("Carregando...");
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+        dialog.show();
         initUser();
         saveUser();
     }
@@ -148,14 +155,20 @@ public class SignUpActivity extends CommonActivity {
                         firebase.unauth();
 
                         showToast( "Conta criada com sucesso!" );
-                        closeProgressBar();
+                        //closeProgressBar();
+                        if (dialog.isShowing()) {
+                            dialog.dismiss();
+                        }
                         finish();
                     }
 
                     @Override
                     public void onError(FirebaseError firebaseError) {
                         showSnackbar( firebaseError.getMessage() );
-                        closeProgressBar();
+                        //closeProgressBar();
+                        if (dialog.isShowing()) {
+                            dialog.dismiss();
+                        }
                     }
                 }
         );

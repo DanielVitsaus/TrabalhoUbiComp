@@ -17,6 +17,7 @@ import br.com.tiradividas.Model.User;
 import br.com.tiradividas.R;
 import br.com.tiradividas.activityes.Localizacao;
 import br.com.tiradividas.chat.ChatActivity;
+import br.com.tiradividas.chat.ChatActivity2;
 import br.com.tiradividas.util.Local;
 
 
@@ -59,7 +60,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             public void onClick(View v) {
 
                 local.pararConexaoComGoogleApi();
-                Intent intent = new Intent(context, ChatActivity.class);
+                Intent intent = new Intent(context, ChatActivity2.class);
                 String idChat = user.getId() +"_"+ users.get(position).getId();
                 String idChat2 = users.get(position).getId() +"_"+ user.getId();
 
@@ -84,11 +85,12 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                 }
 
                 intent.putExtra("nome", user.getNome());
+                intent.putExtra("nomeamigo", users.get(position).getNome());
                 intent.putExtra("iduser", user.getId());
 
                 localizacao.startActivity(intent);
                 Toast.makeText(context, "Deu certo", Toast.LENGTH_LONG).show();
-                localizacao.finish();
+                //localizacao.finish();
             }
         });
 

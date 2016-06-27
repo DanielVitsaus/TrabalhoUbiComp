@@ -21,4 +21,6 @@
     <string name="title_activity_chat">ChatActivity</string>
     <string name="logo">logo</string>
     <string name="disconnnected">disconnnected</string>
+    <string name="title_activity_chat2">ChatActivity2</string>
+    <string name="btsend">btsend</string>
 </resources>

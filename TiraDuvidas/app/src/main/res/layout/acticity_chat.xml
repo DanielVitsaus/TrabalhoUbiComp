@@ -31,7 +31,6 @@
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/background2"
                 android:layout_below="@+id/view">
 
                 <!--
@@ -52,7 +51,8 @@
                     android:id="@+id/list"
                     android:layout_alignParentEnd="false"
                     android:layout_above="@+id/listFooter"
-                    android:layout_alignParentTop="true" />
+                    android:layout_alignParentTop="true"
+                    android:background="@drawable/background3" />
 
 
                 <LinearLayout
