@@ -72,11 +72,16 @@
         <activity
             android:name=".chat.ChatActivity2"
             android:label="@string/title_activity_chat2"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName = ".activityes.Localizacao"  >
-        <meta-data
-            android:name = "android.support.PARENT_ACTIVITY"
-            android:value = ".activityes.Localizacao"  /> </activity>
+            android:parentActivityName=".activityes.Localizacao"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activityes.Localizacao" />
+        </activity>
+        <activity
+            android:name=".activityes.SemInternet"
+            android:label="@string/title_activity_sem_internet"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

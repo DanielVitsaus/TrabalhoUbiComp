@@ -23,4 +23,5 @@
     <string name="disconnnected">disconnnected</string>
     <string name="title_activity_chat2">ChatActivity2</string>
     <string name="btsend">btsend</string>
+    <string name="title_activity_sem_internet">SemInternet</string>
 </resources>

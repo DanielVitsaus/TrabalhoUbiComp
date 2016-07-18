@@ -1,6 +1,9 @@
 package br.com.tiradividas;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -13,7 +16,9 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
 import br.com.tiradividas.Model.User;
+import br.com.tiradividas.activityes.Localizacao;
 import br.com.tiradividas.activityes.LoginActivity;
+import br.com.tiradividas.activityes.SemInternet;
 import br.com.tiradividas.util.LibraryClass;
 
 /**
@@ -40,11 +45,17 @@ public class SplashScreen extends MainActivity {
         user = LibraryClass.getUser();
 
         String id = LibraryClass.getSP(this,IDUSER);
-        if (!id.isEmpty()){
-            coletaDado(id);
+
+        if (!isConnectingToInternet()){
+            Intent i = new Intent(SplashScreen.this, SemInternet.class);
+            startActivity(i);
+
+            finish();
+        }else  if (id.isEmpty()){
+            delay(900);
         }
         else {
-            delay();
+            coletaDado(id);
         }
 
     }
@@ -74,7 +85,7 @@ public class SplashScreen extends MainActivity {
                     }
 
                 }
-                delay();
+                delay(400);
             }
 
             @Override
@@ -84,7 +95,7 @@ public class SplashScreen extends MainActivity {
         });
     }
 
-    private void delay(){
+    private void delay(int time){
 
         new Handler().postDelayed(new Runnable() {
 
@@ -95,8 +106,14 @@ public class SplashScreen extends MainActivity {
 
                 finish();
             }
-        }, 1500);
+        }, time);
 
+    }
+
+    public boolean isConnectingToInternet(){
+        ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
 }

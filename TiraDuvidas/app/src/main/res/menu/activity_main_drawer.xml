@@ -9,6 +9,17 @@
             android:title="Perfil" />
 
         <item
+            android:id="@+id/nav_slideshow"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Encontre um amigo" />
+
+        <item
+            android:id="@+id/loguot"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Logout" />
+
+        <!--
+        <item
             android:id="@+id/nav_camera"
             android:icon="@drawable/ic_menu_camera"
             android:title="Forum" />
@@ -16,19 +27,15 @@
             android:id="@+id/nav_gallery"
             android:icon="@drawable/ic_menu_gallery"
             android:title="Minhas Duvidas" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Encontre um amigo" />
+
+
         <item
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_menu_manage"
             android:title="Agenda" />
+            -->
 
-        <item
-            android:id="@+id/loguot"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Logout" />
+
     </group>
 
 

@@ -61,15 +61,9 @@ public class LoginActivity extends CommonActivity {
         }
 
 
-        if (isConnectingToInternet()){
-            (findViewById(R.id.connected_net)).setVisibility(View.VISIBLE);
-            (findViewById(R.id.disconnected_net)).setVisibility(View.INVISIBLE);
-            initViews();
-            verifyUserLogged();
-        }else {
-            (findViewById(R.id.connected_net)).setVisibility(View.INVISIBLE);
-            (findViewById(R.id.disconnected_net)).setVisibility(View.VISIBLE);
-        }
+        initViews();
+        verifyUserLogged();
+
 
     }
 
@@ -119,7 +113,7 @@ public class LoginActivity extends CommonActivity {
             local = new Local(this);
             local.pararConexaoComGoogleApi();
         }
-        Intent intent = new Intent( this, Forum.class );
+        Intent intent = new Intent( this, Localizacao.class );
         startActivity(intent);
         finish();
     }

@@ -74,27 +74,16 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_perfil) {
+        if (id == R.id.nav_slideshow) {
+            Intent intent  = new Intent(this.getApplication(), Localizacao.class);
+            startActivity(intent);
+            finish();
+
+        }else if (id == R.id.nav_perfil) {
             Intent intent  = new Intent(this.getApplication(), Perfil.class);
             startActivity(intent);
             finish();
 
-        } else if (id == R.id.nav_camera) {
-            Intent intent  = new Intent(this.getApplication(), Forum.class);
-            startActivity(intent);
-            finish();
-        } else if (id == R.id.nav_gallery) {
-            Intent intent  = new Intent(this.getApplication(), MinhasDuvidas.class);
-            startActivity(intent);
-            finish();
-        } else if (id == R.id.nav_slideshow) {
-            Intent intent  = new Intent(this.getApplication(), Localizacao.class);
-            startActivity(intent);
-            finish();
-        }else if (id == R.id.nav_manage) {
-            Intent intent  = new Intent(this.getApplication(), Agenda.class);
-            startActivity(intent);
-            finish();
         }else if (id == R.id.loguot) {
             Firebase firebase = LibraryClass.getFirebase();
             firebase.unauth();
@@ -105,6 +94,23 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
             finish();
         }
+
+        /*
+        else if (id == R.id.nav_camera) {
+            Intent intent  = new Intent(this.getApplication(), Forum.class);
+            startActivity(intent);
+            finish();
+        } else if (id == R.id.nav_gallery) {
+            Intent intent  = new Intent(this.getApplication(), MinhasDuvidas.class);
+            startActivity(intent);
+            finish();
+        }
+        else if (id == R.id.nav_manage) {
+            Intent intent  = new Intent(this.getApplication(), Agenda.class);
+            startActivity(intent);
+            finish();
+        }
+        */
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer != null) {

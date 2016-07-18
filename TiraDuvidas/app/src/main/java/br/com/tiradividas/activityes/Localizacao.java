@@ -48,6 +48,7 @@ public class Localizacao extends MainActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_localizacao);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("Tira Duvidas");
         setSupportActionBar(toolbar);
 
         recyclerView = (RecyclerView) findViewById(R.id.lista);

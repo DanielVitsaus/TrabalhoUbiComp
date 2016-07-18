@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="br.com.tiradividas.activityes.SignUpActivity"
+    tools:showIn="@layout/activity_sign_up">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:id="@+id/layout_nome">
+
+            <AutoCompleteTextView
+                android:id="@+id/edit_casda_nome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textCapSentences|textPersonName|textAutoCorrect"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textSize="16sp"
+                android:hint="nome"
+                android:imeOptions="actionNext"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:layout_below="@+id/layout_nome"
+            android:id="@+id/layout_email">
+
+            <AutoCompleteTextView
+                android:id="@+id/edit_cadas_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:hint="email"
+                android:textSize="16sp"
+                android:imeOptions="actionNext"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:layout_below="@+id/layout_email"
+            android:id="@+id/layout_escolaridade">
+
+            <AutoCompleteTextView
+                android:id="@+id/edit_cadas_escolaridade"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="escolaridade"
+                android:inputType="textCapSentences|textAutoCorrect"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textSize="16sp"
+                android:imeOptions="actionNext"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:layout_below="@+id/layout_escolaridade"
+            android:id="@+id/layout_idade">
+
+            <AutoCompleteTextView
+                android:id="@+id/edit_cadas_idade"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="idade"
+                android:inputType="textAutoCorrect|textCapCharacters"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textSize="16sp"
+                android:imeOptions="actionNext"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/layout_mat_dif"
+            android:layout_below="@+id/layout_idade"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Materia com dificuldade"
+                android:id="@+id/text_cadas_mat_dif"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="4dp"
+                android:textSize="16sp"
+                android:textColor="#000000"
+                android:typeface="serif"
+                android:layout_marginTop="6dp" />
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinner_mat_dif"
+                android:drawSelectorOnTop="true"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/layout_mat_domi"
+            android:layout_below="@+id/layout_mat_dif"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Materia que Domina"
+                android:id="@+id/text_cadas_mat_dom"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="4dp"
+                android:textSize="16sp"
+                android:textColor="#000000"
+                android:typeface="serif"
+                android:layout_marginTop="6dp" />
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinner_mat_dom"
+                android:drawSelectorOnTop="true"/>
+
+        </LinearLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:layout_below="@+id/layout_mat_domi"
+            android:id="@+id/layout_senha">
+
+            <AutoCompleteTextView
+                android:id="@+id/edit_cadas_senha"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="senha"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textSize="16sp"
+                android:inputType="textPassword"
+                android:imeOptions="actionNext"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:text="cadastrar"
+            android:id="@+id/buttom_cadas"
+            android:layout_below="@+id/layout_senha"
+            android:layout_centerInParent="true"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:typeface="serif"
+            android:layout_marginTop="5dp" />
+
+        <ProgressBar
+            android:layout_alignParentBottom="true"
+            android:id="@+id/sign_up_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_below="@+id/buttom_cadas"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:progressDrawable="@color/colorAccent"
+            style="?android:attr/progressBarStyleHorizontal" />
+
+
+    </RelativeLayout>
+
+</ScrollView>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="br.com.tiradividas.activityes.SemInternet"
+    android:background="@android:color/darker_gray">
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imgdisconnect"
+        android:layout_gravity="center"
+        android:src="@drawable/cloudoff"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="100dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Sem conexão com a internet. \n Favor conectar no Wifi ou na rede movel"
+        android:id="@+id/yextDisconnect"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="top|center"
+        android:textStyle="bold"
+        android:typeface="serif"
+        android:textColor="@android:color/primary_text_light"
+        android:textIsSelectable="false"
+        android:textSize="16sp"
+        android:layout_marginBottom="20dp" />
+</RelativeLayout>
