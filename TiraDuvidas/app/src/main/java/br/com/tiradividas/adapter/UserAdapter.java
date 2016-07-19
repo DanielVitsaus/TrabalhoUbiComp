@@ -16,7 +16,6 @@ import java.util.List;
 import br.com.tiradividas.Model.User;
 import br.com.tiradividas.R;
 import br.com.tiradividas.activityes.Localizacao;
-import br.com.tiradividas.chat.ChatActivity;
 import br.com.tiradividas.chat.ChatActivity2;
 import br.com.tiradividas.util.Local;
 

@@ -121,9 +121,10 @@ public class LoginActivity extends CommonActivity {
     private void verifyUserLogged(){
 
         if( firebase.getAuth() != null ){
-            //initUser();
+
             LibraryClass.saveSP(LoginActivity.this, IDUSER , firebase.getAuth().getUid());
             user.setId(firebase.getAuth().getUid());
+            //initUser();
             callMainActivity();
         }
         else{
@@ -137,6 +138,7 @@ public class LoginActivity extends CommonActivity {
                                 user.saveTokenSP( LoginActivity.this, authData.getToken() );
                                 LibraryClass.saveSP(LoginActivity.this, IDUSER , authData.getUid());
                                 user.setId(authData.getUid());
+                                //initUser();
                                 callMainActivity();
                             }
 
@@ -158,13 +160,16 @@ public class LoginActivity extends CommonActivity {
                         user.saveTokenSP( LoginActivity.this, authData.getToken() );
                         LibraryClass.saveSP(LoginActivity.this, IDUSER , authData.getUid());
                         user.setId(authData.getUid());
+                        Local local = new Local(LoginActivity.this);
                         Map<String, Object> nome  = authData.getProviderData();
                         Log.i("log", nome.toString());
+                        //initUser();
                         //closeProgressBar();
-                        callMainActivity();
                         if (dialog.isShowing()) {
                             dialog.dismiss();
+                            local.pararConexaoComGoogleApi();
                         }
+                        callMainActivity();
 
                     }
 

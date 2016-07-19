@@ -74,7 +74,11 @@ public class ChatActivity2 extends AppCompatActivity {
         }
 
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null)
+        {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
 
         metText = (EditText) findViewById(R.id.etText);
         mbtSent = (ImageButton) findViewById(R.id.btSent);

@@ -37,7 +37,8 @@ public class SignUpActivity extends CommonActivity {
     private Spinner mat_dom;
     private ProgressDialog dialog = null;
 
-    private String[] matetias = new String[]{"Cálculo I", "Cálculo II", "Cálculo III","Física I","Física II" ,"Física III", "Algoritmo", "Química"};
+    private String[] matetias = new String[]{"Selecione uma Materia","Cálculo I", "Cálculo II", "Cálculo III","Física I","Física II" ,"Física III", "Algoritmo", "Química",
+            "Anatomia"};
 
 
     @Override
@@ -70,7 +71,8 @@ public class SignUpActivity extends CommonActivity {
             mat_dom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    matDOM = matetias[position];
+                    if (position != 0)
+                        matDOM = matetias[position];
                 }
 
                 @Override

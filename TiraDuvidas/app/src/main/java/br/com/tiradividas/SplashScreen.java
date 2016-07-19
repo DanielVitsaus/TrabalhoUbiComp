@@ -82,6 +82,7 @@ public class SplashScreen extends MainActivity {
                         user.setLongetude(u.getLongetude());
                         user.setLista_chat(u.getLista_chat());
                         user.setId(d.getKey());
+
                     }
 
                 }

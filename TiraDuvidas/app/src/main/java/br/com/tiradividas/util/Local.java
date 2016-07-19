@@ -39,6 +39,7 @@ public class Local implements GoogleApiClient.ConnectionCallbacks, GoogleApiClie
     private Firebase firebase;
     private Map<String, Object> map;
     private LocationRequest locationRequest;
+    private User user;
 
 
     public Local(Activity activity) {
@@ -46,7 +47,7 @@ public class Local implements GoogleApiClient.ConnectionCallbacks, GoogleApiClie
         callConnection();
         map = new HashMap<>();
         firebase = LibraryClass.getFirebase();
-        User user = LibraryClass.getUser();
+        user = LibraryClass.getUser();
 
         firebase = firebase.child("users").child(user.getId());
 
@@ -91,6 +92,9 @@ public class Local implements GoogleApiClient.ConnectionCallbacks, GoogleApiClie
 
             map.put("latitude", String.valueOf(location.getLatitude()));
             map.put("longetude", String.valueOf(location.getLongitude()));
+
+            user.setLatitude(String.valueOf(location.getLatitude()));
+            user.setLongetude(String.valueOf(location.getLongitude()));
 
             firebase.updateChildren(map);
 

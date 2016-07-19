@@ -71,8 +71,8 @@ public class Localizacao extends MainActivity {
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         if (navigationView != null) {
             View view = navigationView.getHeaderView(0);
-            ((TextView)view.findViewById(R.id.nomeuser)).setText(LibraryClass.getUser().getNome());
-            ((TextView)view.findViewById(R.id.emailuser)).setText(LibraryClass.getUser().getEmail());
+            ((TextView)view.findViewById(R.id.nomeuser)).setText(user.getNome());
+            ((TextView)view.findViewById(R.id.emailuser)).setText(user.getEmail());
             navigationView.setNavigationItemSelectedListener(this);
         }
 
@@ -130,6 +130,9 @@ public class Localizacao extends MainActivity {
 
                     if (user.getId().compareTo(u.getId()) != 0 && local.getDistancia() < 100) {
                         users.add(u);
+                    }
+                    if (user.getId().compareTo(u.getId()) == 0){
+                        user = u;
                     }
                 }
                 //initFirebaseAdapter();

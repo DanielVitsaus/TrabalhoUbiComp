@@ -25,7 +25,7 @@ public class Perfil extends MainActivity {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         if (drawer != null) {
-            drawer.setDrawerListener(toggle);
+            drawer.addDrawerListener(toggle);
         }
         toggle.syncState();
 
