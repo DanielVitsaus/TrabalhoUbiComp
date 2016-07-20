@@ -2,9 +2,7 @@ package br.com.tiradividas.activityes;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,8 +24,6 @@ import br.com.tiradividas.MainActivity;
 import br.com.tiradividas.Model.User;
 import br.com.tiradividas.R;
 import br.com.tiradividas.adapter.UserAdapter;
-import br.com.tiradividas.adapter.UserRecyclerAdapter;
-import br.com.tiradividas.adapter.UserViewHolder;
 import br.com.tiradividas.util.LibraryClass;
 import br.com.tiradividas.util.Local;
 
@@ -36,10 +32,10 @@ public class Localizacao extends MainActivity {
     private Local local;
     private static User user;
     private static List<User> users;
-    private UserRecyclerAdapter adapter;
-    private UserAdapter myUserAdapter;
+    //private UserRecyclerAdapter adapter;
     private RecyclerView recyclerView;
     private ProgressDialog dialog = null;
+    private TextView nomeuser;
 
     private Firebase firebase;
 
@@ -56,7 +52,6 @@ public class Localizacao extends MainActivity {
 
         users = new ArrayList<>();
 
-
         firebase = LibraryClass.getFirebase().child("users");
 
 
@@ -71,7 +66,8 @@ public class Localizacao extends MainActivity {
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         if (navigationView != null) {
             View view = navigationView.getHeaderView(0);
-            ((TextView)view.findViewById(R.id.nomeuser)).setText(user.getNome());
+            nomeuser = (TextView)view.findViewById(R.id.nomeuser);
+            nomeuser.setText(user.getNome());
             ((TextView)view.findViewById(R.id.emailuser)).setText(user.getEmail());
             navigationView.setNavigationItemSelectedListener(this);
         }
@@ -84,23 +80,9 @@ public class Localizacao extends MainActivity {
 
     }
 
-
-    private void initFirebaseAdapter() {
-
-        Log.i("log", "ATU -> " + user.toString());
-        adapter = new UserRecyclerAdapter(User.class, R.layout.activity_localizacao, UserViewHolder.class, firebase);
-
-        RecyclerView rvUsers = (RecyclerView) findViewById(R.id.lista);
-        if (rvUsers != null) {
-            rvUsers.setHasFixedSize(true);
-            rvUsers.setLayoutManager(new LinearLayoutManager(this));
-            rvUsers.setAdapter(adapter);
-        }
-    }
-
     private void initUserAdapte(List<User> users) {
         Log.i("log", "User novo -> "+user.toString());
-        myUserAdapter = new UserAdapter(this, user,users, local);
+        UserAdapter myUserAdapter = new UserAdapter(this, user, users, local);
         recyclerView.setLayoutManager(new LinearLayoutManager(Localizacao.this));
         recyclerView.setAdapter(myUserAdapter);
         if (dialog.isShowing()) {
@@ -132,10 +114,10 @@ public class Localizacao extends MainActivity {
                         users.add(u);
                     }
                     if (user.getId().compareTo(u.getId()) == 0){
+                        nomeuser.setText(u.getNome());
                         user = u;
                     }
                 }
-                //initFirebaseAdapter();
                 initUserAdapte(users);
             }
 
@@ -144,7 +126,6 @@ public class Localizacao extends MainActivity {
 
             }
         });
-
 
     }
 
@@ -159,7 +140,6 @@ public class Localizacao extends MainActivity {
         users.clear();
         local.pararConexaoComGoogleApi();
         super.onStop();
-        //users.clear();
     }
 
     @Override

@@ -108,6 +108,7 @@ public class ChatActivity2 extends AppCompatActivity {
                      * Firebase - Send message
                      */
                     mFirebaseRef.push().setValue(new Chat(message, nomeuser,mId));
+                    //envia msg para o serdidor dizendo que mando um nova mensagem
                 }
 
                 metText.setText("");

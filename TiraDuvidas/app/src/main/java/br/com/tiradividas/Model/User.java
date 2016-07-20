@@ -169,7 +169,10 @@ public class User {
 
     public void addIdChat(String chat){
         //this.lista_chat = new ArrayList<>();
-        this.lista_chat.add(chat);
+        if(!this.lista_chat.contains(chat)){
+            this.lista_chat.add(chat);
+        }
+
     }
 
     @Override
