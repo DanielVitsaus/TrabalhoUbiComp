@@ -29,4 +29,19 @@
         <item name="android:background">@color/black_overlay</item>
     </style>
 
+    <!-- Base application theme. -->
+    <style name="Theme.Anexo" parent="@style/AppTheme.PopupOverlay">
+        <!-- Pointer to Overflow style ***MUST*** go here or it will not work -->
+        <item name="android:actionOverflowButtonStyle">@style/OverFlow</item>
+    </style>
+
+    <!-- Styles -->
+    <style name="OverFlow" parent="@android:style/Widget.Holo.Light.ActionButton.Overflow">
+        <item name="android:src">@drawable/ic_action_anexo_64</item>
+    </style>
+
+
+
+
+
 </resources>

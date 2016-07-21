@@ -3,6 +3,7 @@ package br.com.tiradividas.chat;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
@@ -12,6 +13,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,6 +25,7 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+import com.firebase.client.collection.LLRBNode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,6 +73,7 @@ public class ChatActivity2 extends AppCompatActivity {
             nomeamigo = dados.getString("nomeamigo");
             Log.i("log", nomeamigo);
             toolbar.setTitle(dados.getString("nomeamigo"));
+            toolbar.setTitleTextColor(Color.WHITE);
         }
 
         if (dados.getString("idchat") != null) {
@@ -192,4 +197,27 @@ public class ChatActivity2 extends AppCompatActivity {
         mFirebaseRef.unauth();
         super.onDestroy();
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_chat, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.it_anexo) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 }
