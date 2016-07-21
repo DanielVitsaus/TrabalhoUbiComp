@@ -29,11 +29,13 @@ import java.util.List;
 import br.com.tiradividas.Model.Chat;
 import br.com.tiradividas.R;
 import br.com.tiradividas.adapter.ChatAdapter;
+import br.com.tiradividas.util.FirebaseInstanceIDService;
 import br.com.tiradividas.util.LibraryClass;
 
 public class ChatActivity2 extends AppCompatActivity {
 
     private static final String TAG = ChatActivity2.class.getName();
+    private static final String TOKEN_NOTFI = "TOKEN_APP";
 
     private EditText metText;
     private ImageButton mbtSent;
@@ -108,6 +110,14 @@ public class ChatActivity2 extends AppCompatActivity {
                      * Firebase - Send message
                      */
                     mFirebaseRef.push().setValue(new Chat(message, nomeuser,mId));
+                    Log.i("RES", "ENVIADO");
+                    FirebaseInstanceIDService firebaseInstanceIDService = new FirebaseInstanceIDService();
+
+                    firebaseInstanceIDService.enviaInfo("add",LibraryClass.getSP(ChatActivity2.this, TOKEN_NOTFI),
+                            idChat, LibraryClass.getUser().getId(), "Uma nova mensagem te espera.");
+
+                    firebaseInstanceIDService.enviaInfo("send",LibraryClass.getSP(ChatActivity2.this, TOKEN_NOTFI),
+                            idChat, LibraryClass.getUser().getId(), "Seu amigo precisa de você.!"+nomeuser);
                     //envia msg para o serdidor dizendo que mando um nova mensagem
                 }
 

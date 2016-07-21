@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "79903079698",
+    "firebase_url": "https://chatduvidas.firebaseio.com",
+    "project_id": "chatduvidas",
+    "storage_bucket": "chatduvidas.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:79903079698:android:1bf8a78f81616c0c",
+        "android_client_info": {
+          "package_name": "br.com.tiradividas"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "79903079698-hgkeq525c47lpf9gaga64ahfbpfoam11.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZTiw0ZkmJ4H-MT-JPlE5EqQedShZvsho"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

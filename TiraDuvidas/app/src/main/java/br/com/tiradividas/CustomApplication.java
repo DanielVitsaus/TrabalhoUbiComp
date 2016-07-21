@@ -5,6 +5,7 @@ import android.support.multidex.MultiDexApplication;
 
 import com.firebase.client.Firebase;
 
+import br.com.tiradividas.util.FirebaseInstanceIDService;
 import br.com.tiradividas.util.LibraryClass;
 
 /**

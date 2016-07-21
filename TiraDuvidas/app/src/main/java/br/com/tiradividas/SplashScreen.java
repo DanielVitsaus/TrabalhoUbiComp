@@ -1,12 +1,12 @@
 package br.com.tiradividas;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -16,16 +16,16 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
 import br.com.tiradividas.Model.User;
-import br.com.tiradividas.activityes.Localizacao;
 import br.com.tiradividas.activityes.LoginActivity;
 import br.com.tiradividas.activityes.SemInternet;
+import br.com.tiradividas.util.FirebaseInstanceIDService;
 import br.com.tiradividas.util.LibraryClass;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-public class SplashScreen extends MainActivity {
+public class SplashScreen extends Activity {
 
     private static User user;
     private static final String IDUSER = "IDUSER";
@@ -41,6 +41,7 @@ public class SplashScreen extends MainActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_splash_screen);
+
 
         user = LibraryClass.getUser();
 
@@ -58,6 +59,14 @@ public class SplashScreen extends MainActivity {
             coletaDado(id);
         }
 
+    }
+
+    @Override
+    protected void onStart() {
+        FirebaseInstanceIDService firebaseInstanceIDService = new FirebaseInstanceIDService();
+        firebaseInstanceIDService.setContext(this.getApplicationContext());
+        firebaseInstanceIDService.onTokenRefresh();
+        super.onStart();
     }
 
     private void coletaDado(final String id){
