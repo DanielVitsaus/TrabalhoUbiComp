@@ -4,9 +4,21 @@
     tools:context=".chat.ChatActivity2">
 
     <item
-        android:id="@+id/it_anexo"
+        android:id="@+id/m_camera"
         android:orderInCategory="100"
-        android:icon="@mipmap/anexo"
-        android:title="anexo" />
+        android:icon="@mipmap/camera"
+        android:title="Camera" />
+
+    <item
+        android:id="@+id/m_galeria"
+        android:orderInCategory="100"
+        android:icon="@mipmap/galeria"
+        android:title="Galeria" />
+
+    <item
+        android:id="@+id/m_doc"
+        android:orderInCategory="100"
+        android:icon="@mipmap/doc"
+        android:title="Documentos" />
 
 </menu>

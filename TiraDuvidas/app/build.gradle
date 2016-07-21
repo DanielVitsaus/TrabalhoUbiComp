@@ -43,5 +43,8 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:24.1.0'
     compile 'com.google.firebase:firebase-messaging:9.0.2'
     compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'com.google.firebase:firebase-storage:9.0.0'
+    compile 'com.google.firebase:firebase-auth:9.0.0'
+
 }
 apply plugin: 'com.google.gms.google-services'

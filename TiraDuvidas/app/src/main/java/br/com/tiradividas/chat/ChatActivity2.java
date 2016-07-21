@@ -1,10 +1,16 @@
 package br.com.tiradividas.chat;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -19,6 +25,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
@@ -27,6 +34,7 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.firebase.client.collection.LLRBNode;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +48,10 @@ public class ChatActivity2 extends AppCompatActivity {
 
     private static final String TAG = ChatActivity2.class.getName();
     private static final String TOKEN_NOTFI = "TOKEN_APP";
+    private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
+    private static final int SELECT_PICTURE = 1;
+
+    private String selectedImagePath;
 
     private EditText metText;
     private ImageButton mbtSent;
@@ -53,6 +65,8 @@ public class ChatActivity2 extends AppCompatActivity {
     private String idChat;
     private String nomeuser;
     private String nomeamigo;
+    private String uri;
+    private File imageFile;
 
 
     @Override
@@ -108,6 +122,7 @@ public class ChatActivity2 extends AppCompatActivity {
         mbtSent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 String message = metText.getText().toString();
 
                 if (!message.isEmpty()) {
@@ -202,9 +217,15 @@ public class ChatActivity2 extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_chat, menu);
+
+        menu.getItem(0).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        menu.getItem(1).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        menu.getItem(2).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+
         return true;
     }
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -213,11 +234,84 @@ public class ChatActivity2 extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.it_anexo) {
+        if (id == R.id.m_camera) {
+
+            File picsDir = Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_PICTURES);
+            imageFile = new File(picsDir, "foto.jpg");
+            uri = imageFile.toString();
+            Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            i.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(imageFile));
+            //startActivity(i);
+            startActivityForResult(i, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+
+            return true;
+        }
+
+        if (id == R.id.m_galeria) {
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(intent,"Select Picture"), SELECT_PICTURE);
+            return true;
+        }
+
+        if (id == R.id.m_doc) {
+            //Intent intent = new Intent( Intent.ACTION_OPEN_DOCUMENT );
+            //startActivity( intent );
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                // Image captured and saved to fileUri specified in the Intent
+                //Toast.makeText(this, "Image saved to:\n" +data.getData(), Toast.LENGTH_LONG).show();
+                Intent intent = new Intent( Intent.ACTION_VIEW, Uri.fromFile(imageFile) );
+                startActivity(intent);
+                mFirebaseRef.push().setValue(new Chat(uri, nomeuser,mId));
+            }
+        }else if (resultCode == RESULT_OK) {
+            if (requestCode == SELECT_PICTURE) {
+                Uri selectedImageUri = data.getData();
+                selectedImagePath = getPath(selectedImageUri);
+            }
+        }
+    }
+
+    /**
+     * auxiliar para saber o caminho de uma imagem URI
+     */
+    public String getPath(Uri uri) {
+
+        if( uri == null ) {
+            // TODO realizar algum log ou feedback do utilizador
+            return null;
+        }
+
+
+        // Tenta recuperar a imagem da media store primeiro
+        // Isto só irá funcionar para as imagens selecionadas da galeria
+
+        String[] projection = { MediaStore.Images.Media.DATA };
+        Cursor cursor = managedQuery(uri, projection, null, null, null);
+        if( cursor != null ){
+            int column_index = cursor
+                    .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        }
+
+        return uri.getPath();
+    }
+
 }
+
+
+
+

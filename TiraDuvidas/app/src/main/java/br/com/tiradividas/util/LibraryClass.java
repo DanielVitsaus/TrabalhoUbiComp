@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.firebase.client.Firebase;
+import com.google.firebase.storage.FirebaseStorage;
 
 import br.com.tiradividas.Model.User;
 
@@ -12,6 +13,7 @@ public final class LibraryClass {
     public static String PREF = "PREF";
     private static Firebase firebase;
     private static Firebase firebase_chat;
+    private static FirebaseStorage storage;
     private static User user;
 
 
@@ -33,6 +35,14 @@ public final class LibraryClass {
         }
 
         return ( firebase_chat );
+    }
+
+    public static FirebaseStorage getStorage (){
+        if ( storage == null ){
+            storage = FirebaseStorage.getInstance();
+        }
+
+        return  storage;
     }
 
     public static User getUser(){
