@@ -124,6 +124,7 @@ public class ChatActivity2 extends AppCompatActivity {
             public void onClick(View v) {
 
                 String message = metText.getText().toString();
+                String tokenAPP = LibraryClass.getSP(ChatActivity2.this,TOKEN_NOTFI);
 
                 if (!message.isEmpty()) {
                     /**
@@ -133,10 +134,10 @@ public class ChatActivity2 extends AppCompatActivity {
                     Log.i("RES", "ENVIADO");
                     FirebaseInstanceIDService firebaseInstanceIDService = new FirebaseInstanceIDService();
 
-                    firebaseInstanceIDService.enviaInfo("add",LibraryClass.getSP(ChatActivity2.this, TOKEN_NOTFI),
+                    firebaseInstanceIDService.enviaInfo("add",tokenAPP,
                             idChat, LibraryClass.getUser().getId(), "Uma nova mensagem te espera.");
 
-                    firebaseInstanceIDService.enviaInfo("send",LibraryClass.getSP(ChatActivity2.this, TOKEN_NOTFI),
+                    firebaseInstanceIDService.enviaInfo("send",tokenAPP,
                             idChat, LibraryClass.getUser().getId(), "Seu amigo precisa de você.!"+nomeuser);
                     //envia msg para o serdidor dizendo que mando um nova mensagem
                 }

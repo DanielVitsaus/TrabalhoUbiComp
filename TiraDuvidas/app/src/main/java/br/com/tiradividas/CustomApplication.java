@@ -19,6 +19,7 @@ public class CustomApplication extends MultiDexApplication {
         MultiDex.install(this);
         Firebase.setAndroidContext(this);
         LibraryClass.getUser();
+
     }
 
     /*

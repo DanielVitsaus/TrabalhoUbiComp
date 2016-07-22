@@ -49,7 +49,7 @@ public class Localizacao extends MainActivity {
 
         recyclerView = (RecyclerView) findViewById(R.id.lista);
         user = LibraryClass.getUser();
-
+        local = new Local(this);
         users = new ArrayList<>();
 
         firebase = LibraryClass.getFirebase().child("users");
@@ -93,7 +93,6 @@ public class Localizacao extends MainActivity {
 
     @Override
     protected void onStart() {
-        local = new Local(this);
         super.onStart();
 
         firebase.addValueEventListener(new ValueEventListener() {
@@ -137,7 +136,6 @@ public class Localizacao extends MainActivity {
 
     @Override
     protected void onStop() {
-        users.clear();
         local.pararConexaoComGoogleApi();
         super.onStop();
     }

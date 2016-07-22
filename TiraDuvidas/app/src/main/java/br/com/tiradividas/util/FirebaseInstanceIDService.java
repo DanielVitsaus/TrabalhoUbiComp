@@ -30,19 +30,24 @@ public class FirebaseInstanceIDService extends FirebaseInstanceIdService {
     // [START refresh_token]
     private Context context;
     private String msgResult;
+    private String refreshedToken;
 
     @Override
     public void onTokenRefresh() {
 
         // Get updated InstanceID token.
-        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+        refreshedToken = FirebaseInstanceId.getInstance().getToken();
         //Log.i("TOKEN" , refreshedToken);
         LibraryClass.saveSP(context, TOKEN_NOTFI, refreshedToken);
         // Send registration to app's server.
         //registerToken(refreshedToken);
     }
 
-    /*
+    public String getRefreshedToken() {
+        return refreshedToken;
+    }
+
+/*
     public void registerToken(String action, String token, String chat_id, String id_user, String message) {
 
         HttpURLConnection cnn = null;

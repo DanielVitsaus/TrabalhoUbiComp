@@ -21,6 +21,7 @@ import java.util.Map;
 
 import br.com.tiradividas.Model.User;
 import br.com.tiradividas.R;
+import br.com.tiradividas.util.FirebaseInstanceIDService;
 import br.com.tiradividas.util.LibraryClass;
 import br.com.tiradividas.util.Local;
 
@@ -32,7 +33,7 @@ public class LoginActivity extends CommonActivity {
     private static User user;
     private AutoCompleteTextView email;
     private EditText senha;
-    private Local local;
+    private Local local = null;
     private ProgressDialog dialog = null;
 
 
@@ -43,6 +44,7 @@ public class LoginActivity extends CommonActivity {
         setContentView(R.layout.activity_login);
 
         user = LibraryClass.getUser();
+
         firebase = LibraryClass.getFirebase();
 
         Button login = (Button) findViewById(R.id.email_sign_in_button);
@@ -64,12 +66,21 @@ public class LoginActivity extends CommonActivity {
 
    @Override
     protected void onStart() {
-        super.onStart();
+
+       super.onStart();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if(local != null) {
+            local.pararConexaoComGoogleApi();
+        }
+        super.onDestroy();
     }
 
     protected void initViews(){
@@ -104,10 +115,9 @@ public class LoginActivity extends CommonActivity {
 
 
     private void callMainActivity(){
-        if (user.getLatitude() == null && user.getLongetude() == null){
-            local = new Local(this);
-            local.pararConexaoComGoogleApi();
-        }
+        //if (user.getLatitude().length() == 0 && user.getLongetude().length() == 0){
+        local = new Local(this);
+        //}
         Intent intent = new Intent( this, Localizacao.class );
         startActivity(intent);
         finish();

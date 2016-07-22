@@ -22,7 +22,7 @@ public final class LibraryClass {
 
     public static Firebase getFirebase(){
         if( firebase == null ){
-            firebase = new Firebase("https://tiraduvidas.firebaseio.com");
+            firebase = new Firebase("https://chatduvidas.firebaseio.com/");
         }
 
         return( firebase );

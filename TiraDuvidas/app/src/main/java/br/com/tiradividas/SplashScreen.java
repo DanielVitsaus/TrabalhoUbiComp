@@ -20,6 +20,7 @@ import br.com.tiradividas.activityes.LoginActivity;
 import br.com.tiradividas.activityes.SemInternet;
 import br.com.tiradividas.util.FirebaseInstanceIDService;
 import br.com.tiradividas.util.LibraryClass;
+import br.com.tiradividas.util.Local;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -29,6 +30,7 @@ public class SplashScreen extends Activity {
 
     private static User user;
     private static final String IDUSER = "IDUSER";
+    private Local local  = null;
 
 
     @Override
@@ -41,7 +43,6 @@ public class SplashScreen extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_splash_screen);
-
 
         user = LibraryClass.getUser();
 
@@ -64,14 +65,23 @@ public class SplashScreen extends Activity {
     @Override
     protected void onStart() {
         FirebaseInstanceIDService firebaseInstanceIDService = new FirebaseInstanceIDService();
-        firebaseInstanceIDService.setContext(this.getApplicationContext());
+        firebaseInstanceIDService.setContext(this);
         firebaseInstanceIDService.onTokenRefresh();
         super.onStart();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if(local != null){
+            local.pararConexaoComGoogleApi();
+        }
+        super.onDestroy();
     }
 
     private void coletaDado(final String id){
 
         Firebase firebase = LibraryClass.getFirebase();
+
 
         firebase.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -95,7 +105,8 @@ public class SplashScreen extends Activity {
                     }
 
                 }
-                delay(400);
+                local = new Local(SplashScreen.this);
+                delay(200);
             }
 
             @Override

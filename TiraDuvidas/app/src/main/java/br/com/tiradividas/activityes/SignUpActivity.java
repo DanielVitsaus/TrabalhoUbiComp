@@ -166,7 +166,7 @@ public class SignUpActivity extends CommonActivity {
 
                     @Override
                     public void onError(FirebaseError firebaseError) {
-                        showSnackbar( firebaseError.getMessage() );
+                        showToast( firebaseError.getMessage() );
                         //closeProgressBar();
                         if (dialog.isShowing()) {
                             dialog.dismiss();
