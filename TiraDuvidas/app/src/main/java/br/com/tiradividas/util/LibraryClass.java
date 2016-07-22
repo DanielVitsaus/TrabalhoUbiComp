@@ -31,7 +31,6 @@ public final class LibraryClass {
     public static Firebase getFirebase_chat(){
         if ( firebase_chat == null ){
             firebase_chat = new Firebase("https://chatduvidas.firebaseio.com/");
-            //firebase_chat = new Firebase("https://testechatd.firebaseio.com/");
         }
 
         return ( firebase_chat );

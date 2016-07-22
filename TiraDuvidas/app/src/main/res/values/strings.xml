@@ -24,4 +24,5 @@
     <string name="title_activity_chat2">ChatActivity2</string>
     <string name="btsend">btsend</string>
     <string name="title_activity_sem_internet">SemInternet</string>
+    <string name="img_file_up">img para representar o arquivo a ser enviado.</string>
 </resources>

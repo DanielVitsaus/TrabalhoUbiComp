@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -33,6 +34,11 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.firebase.client.collection.LLRBNode;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -48,14 +54,19 @@ public class ChatActivity2 extends AppCompatActivity {
 
     private static final String TAG = ChatActivity2.class.getName();
     private static final String TOKEN_NOTFI = "TOKEN_APP";
-    private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
+    private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 10320;
     private static final int SELECT_PICTURE = 1;
+    private static final int SELECT_DOCUMENT = 3;
 
     private String selectedImagePath;
+    private String selectedDocumentPath;
 
     private EditText metText;
     private ImageButton mbtSent;
     private Firebase mFirebaseRef;
+    private StorageReference storageRef;
+    private StorageReference imageFolderFireBase;
+    private StorageReference docFolderFireBase;
 
     private List<Chat> mChats;
     private RecyclerView mRecyclerView;
@@ -68,6 +79,7 @@ public class ChatActivity2 extends AppCompatActivity {
     private String uri;
     private File imageFile;
 
+    private boolean teste = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +124,11 @@ public class ChatActivity2 extends AppCompatActivity {
         mAdapter = new ChatAdapter(mChats, mId);
         mRecyclerView.setAdapter(mAdapter);
 
+        FirebaseStorage storage = LibraryClass.getStorage();
+        storageRef = storage.getReferenceFromUrl("gs://chatduvidas.appspot.com");
+
+        //imageFolderFireBase = storageRef.child("image");
+        //docFolderFireBase = storageRef.child("document");
 
         /**
          * Firebase - Inicialize
@@ -130,7 +147,7 @@ public class ChatActivity2 extends AppCompatActivity {
                     /**
                      * Firebase - Send message
                      */
-                    mFirebaseRef.push().setValue(new Chat(message, nomeuser,mId));
+                    mFirebaseRef.push().setValue(new Chat(message, nomeuser,mId, "0"));
                     Log.i("RES", "ENVIADO");
                     FirebaseInstanceIDService firebaseInstanceIDService = new FirebaseInstanceIDService();
 
@@ -229,16 +246,14 @@ public class ChatActivity2 extends AppCompatActivity {
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.m_camera) {
 
-            File picsDir = Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_PICTURES);
+            teste = true;
+            File picsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
             imageFile = new File(picsDir, "foto.jpg");
             uri = imageFile.toString();
             Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -251,15 +266,17 @@ public class ChatActivity2 extends AppCompatActivity {
 
         if (id == R.id.m_galeria) {
             Intent intent = new Intent();
-            intent.setType("image/*");
+            intent.setType("doc/*");
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent,"Select Picture"), SELECT_PICTURE);
             return true;
         }
 
         if (id == R.id.m_doc) {
-            //Intent intent = new Intent( Intent.ACTION_OPEN_DOCUMENT );
-            //startActivity( intent );
+            Intent intent = new Intent();
+            intent.setType("document/*");
+            intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
+            startActivityForResult(Intent.createChooser(intent,"Select Document"), SELECT_DOCUMENT);
             return true;
         }
 
@@ -269,18 +286,44 @@ public class ChatActivity2 extends AppCompatActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //String uriDOW;
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                // Image captured and saved to fileUri specified in the Intent
-                //Toast.makeText(this, "Image saved to:\n" +data.getData(), Toast.LENGTH_LONG).show();
-                Intent intent = new Intent( Intent.ACTION_VIEW, Uri.fromFile(imageFile) );
-                startActivity(intent);
-                mFirebaseRef.push().setValue(new Chat(uri, nomeuser,mId));
+                //Intent intent = new Intent( Intent.ACTION_VIEW, Uri.fromFile(imageFile) );
+                //startActivity(intent);
+                Uri file = Uri.fromFile(imageFile);
+                StorageReference riversRef = storageRef.child("images/"+file.getLastPathSegment());
+                UploadTask uploadTask = riversRef.putFile(file);
+                uploadTask.addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle unsuccessful uploads
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                        //uriDOW = downloadUrl.toString();
+                        mFirebaseRef.push().setValue(new Chat(uri, nomeuser, mId, "1", downloadUrl.toString()));
+                        Log.i("DOW", downloadUrl.toString());
+                        Log.i("DOW-TRANS", String.valueOf(taskSnapshot.getBytesTransferred()));
+                    }
+                });
+
             }
-        }else if (resultCode == RESULT_OK) {
-            if (requestCode == SELECT_PICTURE) {
+        }else  if (requestCode == SELECT_PICTURE){
+            if (resultCode == RESULT_OK){
                 Uri selectedImageUri = data.getData();
                 selectedImagePath = getPath(selectedImageUri);
+                mFirebaseRef.push().setValue(new Chat(uri, nomeuser,mId, "1"));
+            }
+        }
+        else  if (requestCode == SELECT_DOCUMENT){
+            if (resultCode == RESULT_OK){
+                Uri selectedImageUri = data.getData();
+                selectedDocumentPath = getPath(selectedImageUri);
+                mFirebaseRef.push().setValue(new Chat(uri, nomeuser,mId, "2"));
             }
         }
     }

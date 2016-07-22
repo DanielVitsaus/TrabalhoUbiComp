@@ -105,6 +105,7 @@ public class Localizacao extends MainActivity {
                 for( DataSnapshot d : dataSnapshot.getChildren() ){
                     User u = d.getValue( User.class );
                     u.setId(d.getKey());
+                    /*
                     local.calculaDistancia(
                             Double.valueOf(user.getLatitude()),Double.valueOf(user.getLongetude()),
                             Double.valueOf(u.getLatitude()),Double.valueOf(u.getLongetude()));
@@ -112,9 +113,12 @@ public class Localizacao extends MainActivity {
                     if (user.getId().compareTo(u.getId()) != 0 && local.getDistancia() < 100) {
                         users.add(u);
                     }
+                    */
                     if (user.getId().compareTo(u.getId()) == 0){
                         nomeuser.setText(u.getNome());
                         user = u;
+                    }else{
+                        users.add(u);
                     }
                 }
                 initUserAdapte(users);
