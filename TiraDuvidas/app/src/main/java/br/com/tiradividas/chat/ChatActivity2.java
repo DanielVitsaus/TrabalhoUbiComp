@@ -26,6 +26,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.firebase.client.ChildEventListener;
@@ -37,6 +38,7 @@ import com.firebase.client.collection.LLRBNode;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -54,8 +56,8 @@ public class ChatActivity2 extends AppCompatActivity {
 
     private static final String TAG = ChatActivity2.class.getName();
     private static final String TOKEN_NOTFI = "TOKEN_APP";
-    private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 10320;
-    private static final int SELECT_PICTURE = 1;
+    private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1;
+    private static final int SELECT_PICTURE = 2;
     private static final int SELECT_DOCUMENT = 3;
 
     private String selectedImagePath;
@@ -78,13 +80,16 @@ public class ChatActivity2 extends AppCompatActivity {
     private String nomeamigo;
     private String uri;
     private File imageFile;
+    private StorageReference riversRef;
 
-    private boolean teste = false;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat2);
+
+        progressBar = (ProgressBar) findViewById(R.id.progressBar_teste);
 
         Intent intent = getIntent();
         dados = intent.getExtras();
@@ -112,7 +117,6 @@ public class ChatActivity2 extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-
         metText = (EditText) findViewById(R.id.etText);
         mbtSent = (ImageButton) findViewById(R.id.btSent);
         mRecyclerView = (RecyclerView) findViewById(R.id.rvChat);
@@ -121,19 +125,15 @@ public class ChatActivity2 extends AppCompatActivity {
         mId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         //mRecyclerView.setItemAnimator(new SlideInOutLeftItemAnimator(mRecyclerView));
-        mAdapter = new ChatAdapter(mChats, mId);
+
+        mFirebaseRef = LibraryClass.getFirebase_chat().child("chat").child(idChat);
+
+        mAdapter = new ChatAdapter(mChats, mId, mFirebaseRef);
         mRecyclerView.setAdapter(mAdapter);
 
         FirebaseStorage storage = LibraryClass.getStorage();
         storageRef = storage.getReferenceFromUrl("gs://chatduvidas.appspot.com");
 
-        //imageFolderFireBase = storageRef.child("image");
-        //docFolderFireBase = storageRef.child("document");
-
-        /**
-         * Firebase - Inicialize
-         */
-        mFirebaseRef = LibraryClass.getFirebase_chat().child("chat").child(idChat);
 
 
         mbtSent.setOnClickListener(new View.OnClickListener() {
@@ -179,7 +179,10 @@ public class ChatActivity2 extends AppCompatActivity {
                 if (dataSnapshot != null && dataSnapshot.getValue() != null) {
                     try{
                         Chat model = dataSnapshot.getValue(Chat.class);
-
+                        model.setIdMessage(dataSnapshot.getKey());
+                        if (model.getTipo_message().compareTo("1") == 0){
+                            mAdapter.setFile(imageFile);
+                        }
                         mChats.add(model);
                         mRecyclerView.scrollToPosition(mChats.size() - 1);
                         mAdapter.notifyItemInserted(mChats.size() - 1);
@@ -216,19 +219,28 @@ public class ChatActivity2 extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        mChats.clear();
         finish();
     }
 
     @Override
     protected void onStop() {
-        mFirebaseRef.unauth();
+        //mChats.clear();
+        //mFirebaseRef.unauth();
         super.onStop();
     }
 
     @Override
     protected void onDestroy() {
+        mChats.clear();
         mFirebaseRef.unauth();
         super.onDestroy();
+    }
+
+    @Override
+    protected void onPause() {
+        //mChats.clear();
+        super.onPause();
     }
 
     @Override
@@ -243,40 +255,41 @@ public class ChatActivity2 extends AppCompatActivity {
         return true;
     }
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.m_camera) {
+            int begin = (int) (1 + (Math.random() * (idChat.length()/2 - 1)));
+            int begin2 = (int) (1 + (Math.random() * (idChat.length()/2 - 1)));
+            int end = (int) (idChat.length()/2 + (Math.random() * (idChat.length() - idChat.length()/2)));
+            int end2 = (int) (idChat.length()/2 + (Math.random() * (idChat.length() - idChat.length()/2)));
 
-            teste = true;
             File picsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-            imageFile = new File(picsDir, "foto.jpg");
+            imageFile = new File(picsDir, idChat.substring(begin, end)+(idChat.substring(begin2/2, end2/2)+mId).hashCode()+"_image.jpg");
             uri = imageFile.toString();
             Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             i.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(imageFile));
-            //startActivity(i);
             startActivityForResult(i, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
 
             return true;
-        }
 
-        if (id == R.id.m_galeria) {
+        }else if (id == R.id.m_galeria) {
             Intent intent = new Intent();
-            intent.setType("doc/*");
+            intent.setType("image/*");
             intent.setAction(Intent.ACTION_GET_CONTENT);
-            startActivityForResult(Intent.createChooser(intent,"Select Picture"), SELECT_PICTURE);
-            return true;
-        }
+            //startActivityForResult(Intent.createChooser(intent,"Select Picture"), SELECT_PICTURE);
+            startActivityForResult(intent, SELECT_PICTURE);
 
-        if (id == R.id.m_doc) {
+            return true;
+
+        }else if (id == R.id.m_doc) {
             Intent intent = new Intent();
             intent.setType("document/*");
-            intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
-            startActivityForResult(Intent.createChooser(intent,"Select Document"), SELECT_DOCUMENT);
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            //startActivityForResult(Intent.createChooser(intent,"Select Document"), SELECT_DOCUMENT);
+            startActivityForResult(intent, SELECT_DOCUMENT);
             return true;
         }
 
@@ -289,41 +302,25 @@ public class ChatActivity2 extends AppCompatActivity {
         //String uriDOW;
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                //Intent intent = new Intent( Intent.ACTION_VIEW, Uri.fromFile(imageFile) );
-                //startActivity(intent);
-                Uri file = Uri.fromFile(imageFile);
-                StorageReference riversRef = storageRef.child("images/"+file.getLastPathSegment());
-                UploadTask uploadTask = riversRef.putFile(file);
-                uploadTask.addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle unsuccessful uploads
-                    }
-                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                        //uriDOW = downloadUrl.toString();
-                        mFirebaseRef.push().setValue(new Chat(uri, nomeuser, mId, "1", downloadUrl.toString()));
-                        Log.i("DOW", downloadUrl.toString());
-                        Log.i("DOW-TRANS", String.valueOf(taskSnapshot.getBytesTransferred()));
-                    }
-                });
+
+                mFirebaseRef.push().setValue(new Chat(uri, nomeuser, mId, "1", " ", false, idChat));
 
             }
         }else  if (requestCode == SELECT_PICTURE){
             if (resultCode == RESULT_OK){
                 Uri selectedImageUri = data.getData();
                 selectedImagePath = getPath(selectedImageUri);
-                mFirebaseRef.push().setValue(new Chat(uri, nomeuser,mId, "1"));
+                Toast.makeText(this, selectedImageUri.toString(), Toast.LENGTH_LONG).show();
+                mFirebaseRef.push().setValue(new Chat(selectedImagePath, nomeuser, mId, "1", " ", false, idChat));
+                //mFirebaseRef.push().setValue(new Chat(uri, nomeuser,mId, "1", " "));
             }
         }
         else  if (requestCode == SELECT_DOCUMENT){
             if (resultCode == RESULT_OK){
                 Uri selectedImageUri = data.getData();
                 selectedDocumentPath = getPath(selectedImageUri);
-                mFirebaseRef.push().setValue(new Chat(uri, nomeuser,mId, "2"));
+                mFirebaseRef.push().setValue(new Chat(selectedImagePath, nomeuser, mId, "1", " ", false, idChat));
+                //mFirebaseRef.push().setValue(new Chat(uri, nomeuser,mId, "2", " "));
             }
         }
     }
@@ -337,13 +334,11 @@ public class ChatActivity2 extends AppCompatActivity {
             // TODO realizar algum log ou feedback do utilizador
             return null;
         }
-
-
         // Tenta recuperar a imagem da media store primeiro
         // Isto só irá funcionar para as imagens selecionadas da galeria
 
         String[] projection = { MediaStore.Images.Media.DATA };
-        Cursor cursor = managedQuery(uri, projection, null, null, null);
+        Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
         if( cursor != null ){
             int column_index = cursor
                     .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);

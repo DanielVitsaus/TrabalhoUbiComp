@@ -49,7 +49,11 @@ public class Local implements GoogleApiClient.ConnectionCallbacks, GoogleApiClie
         firebase = LibraryClass.getFirebase();
         user = LibraryClass.getUser();
 
-        firebase = firebase.child("users").child(user.getId());
+        if (user != null){
+            if(user.getId() != null){
+                firebase = firebase.child("users").child(user.getId());
+            }
+        }
 
     }
 

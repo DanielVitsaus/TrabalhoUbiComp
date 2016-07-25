@@ -1,5 +1,8 @@
 package br.com.tiradividas.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties({"idMessage", "idChat"})
 public class Chat {
 
     private String message;
@@ -7,6 +10,9 @@ public class Chat {
     private String id;
     private String tipo_message;
     private String linkdow;
+    private boolean isEnviado = true;
+    private String idMessage;
+    private String idChat;
 
     // Required default constructor for Firebase object mapping
     @SuppressWarnings("unused")
@@ -18,6 +24,25 @@ public class Chat {
         this.author = author;
         this.id = id;
         this.tipo_message = tipo_message;
+    }
+
+    public Chat(String message, String author, String id, String tipo_message, String linkdow, boolean isEnviado, String idChat) {
+        this.message = message;
+        this.author = author;
+        this.id = id;
+        this.tipo_message = tipo_message;
+        this.linkdow = linkdow;
+        this.isEnviado = isEnviado;
+        this.idChat = idChat;
+    }
+
+    public Chat(String message, String author, String id, String tipo_message, String linkdow, boolean isEnviado) {
+        this.message = message;
+        this.author = author;
+        this.id = id;
+        this.tipo_message = tipo_message;
+        this.linkdow = linkdow;
+        this.isEnviado = isEnviado;
     }
 
     public Chat(String message, String author, String id, String tipo_message, String linkdow) {
@@ -66,5 +91,29 @@ public class Chat {
 
     public void setLinkdow(String linkdow) {
         this.linkdow = linkdow;
+    }
+
+    public boolean isEnviado() {
+        return isEnviado;
+    }
+
+    public void setEnviado(boolean enviado) {
+        isEnviado = enviado;
+    }
+
+    public String getIdMessage() {
+        return idMessage;
+    }
+
+    public void setIdMessage(String idMessage) {
+        this.idMessage = idMessage;
+    }
+
+    public String getIdChat() {
+        return idChat;
+    }
+
+    public void setIdChat(String idChat) {
+        this.idChat = idChat;
     }
 }

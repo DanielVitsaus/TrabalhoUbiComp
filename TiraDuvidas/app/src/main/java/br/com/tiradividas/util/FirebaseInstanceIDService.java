@@ -182,7 +182,9 @@ public class FirebaseInstanceIDService extends FirebaseInstanceIdService {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             msgResult = s;
-            Log.w("ServiceResponseMsg", s);
+            if (s != null) {
+                Log.w("ServiceResponseMsg", s);
+            }
         }
     }
 }
