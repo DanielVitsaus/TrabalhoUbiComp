@@ -1,6 +1,7 @@
 package br.com.tiradividas.activityes;
 
 import android.app.ProgressDialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -21,6 +22,7 @@ import br.com.tiradividas.Model.User;
 import br.com.tiradividas.R;
 import br.com.tiradividas.util.LibraryClass;
 import br.com.tiradividas.util.Local;
+import br.com.tiradividas.util.UpdateBD;
 
 public class SignUpActivity extends CommonActivity {
 
@@ -36,6 +38,7 @@ public class SignUpActivity extends CommonActivity {
     private Spinner mat_dif;
     private Spinner mat_dom;
     private ProgressDialog dialog = null;
+    private UpdateBD updateBD;
 
     private String[] matetias = new String[]{"Selecione uma Materia","Cálculo I", "Cálculo II", "Cálculo III","Física I","Física II" ,"Física III", "Algoritmo", "Química",
             "Anatomia"};
@@ -142,6 +145,7 @@ public class SignUpActivity extends CommonActivity {
         dialog.show();
         initUser();
         saveUser();
+
     }
 
     private void saveUser(){
@@ -154,6 +158,7 @@ public class SignUpActivity extends CommonActivity {
                         LibraryClass.saveSP(SignUpActivity.this, EMAILUSER , user.getEmail());
                         user.setId( stringObjectMap.get("uid").toString() );
                         user.saveDB();
+                        new SalvarUser().execute(user);
                         firebase.unauth();
 
                         showToast( "Conta criada com sucesso!" );
@@ -176,4 +181,12 @@ public class SignUpActivity extends CommonActivity {
         );
     }
 
+    public class SalvarUser extends AsyncTask<User,Void,Void>{
+
+        @Override
+        protected Void doInBackground(User... users) {
+            updateBD.adicionaUser(users[0]);
+            return null;
+        }
+    }
 }

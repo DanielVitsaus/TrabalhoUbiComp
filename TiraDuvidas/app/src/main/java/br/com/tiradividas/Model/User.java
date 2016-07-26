@@ -39,6 +39,16 @@ public class User {
         this.lista_chat = new ArrayList<>();
     }
 
+    public User(String nome, String email, String escolaridade, String idade, String materia_domoinio, String materia_dificuldade, String id) {
+        this.nome = nome;
+        this.email = email;
+        this.escolaridade = escolaridade;
+        this.idade = idade;
+        this.materia_domoinio = materia_domoinio;
+        this.materia_dificuldade = materia_dificuldade;
+        this.id = id;
+    }
+
     public String getNome() {
         return nome;
     }

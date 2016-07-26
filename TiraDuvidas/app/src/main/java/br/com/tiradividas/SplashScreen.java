@@ -64,9 +64,7 @@ public class SplashScreen extends Activity {
 
     @Override
     protected void onStart() {
-        FirebaseInstanceIDService firebaseInstanceIDService = new FirebaseInstanceIDService();
-        firebaseInstanceIDService.setContext(this);
-        firebaseInstanceIDService.onTokenRefresh();
+
         super.onStart();
     }
 

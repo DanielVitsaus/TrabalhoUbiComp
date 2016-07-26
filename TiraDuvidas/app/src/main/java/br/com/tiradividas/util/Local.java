@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -28,6 +29,8 @@ import br.com.tiradividas.Model.User;
 public class Local implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
 
+    private static final String IDUSER = "IDUSER";
+
     private GoogleApiClient mGoogleApiClient;
     private final int MY_LOCATION_REQUEST_CODE = 1;
     private Activity activity;
@@ -40,19 +43,26 @@ public class Local implements GoogleApiClient.ConnectionCallbacks, GoogleApiClie
     private Map<String, Object> map;
     private LocationRequest locationRequest;
     private User user;
+    private UpdateBD updateBD;
 
 
     public Local(Activity activity) {
         this.activity = activity;
+        updateBD = new UpdateBD(this.activity);
+
         callConnection();
         map = new HashMap<>();
         firebase = LibraryClass.getFirebase();
         user = LibraryClass.getUser();
+        user.setId(LibraryClass.getSP(this.activity,IDUSER));
 
         if (user != null){
             if(user.getId() != null){
                 firebase = firebase.child("users").child(user.getId());
             }
+        }
+        else {
+            new BuscaUser().execute();
         }
 
     }
@@ -221,4 +231,13 @@ public class Local implements GoogleApiClient.ConnectionCallbacks, GoogleApiClie
     }
 
 
+    public class BuscaUser extends AsyncTask<Void,Void, Void>{
+
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            user = updateBD.findUser(LibraryClass.getSP(activity, IDUSER));
+            return null;
+        }
+    }
 }

@@ -66,7 +66,9 @@ public class LoginActivity extends CommonActivity {
 
    @Override
     protected void onStart() {
-
+       FirebaseInstanceIDService firebaseInstanceIDService = new FirebaseInstanceIDService();
+       firebaseInstanceIDService.setContext(this.getApplicationContext());
+       firebaseInstanceIDService.onTokenRefresh();
        super.onStart();
     }
 
