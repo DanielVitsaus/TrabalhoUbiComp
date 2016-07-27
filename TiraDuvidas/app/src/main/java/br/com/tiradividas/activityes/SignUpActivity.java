@@ -134,6 +134,8 @@ public class SignUpActivity extends CommonActivity {
         user.setMateria_dificuldade(matDIF);
         user.setMateria_domoinio(matDOM);
         user.setSenha( password.getText().toString() );
+        user.setLatitude("-21.7651294");
+        user.setLongetude("-43.3518573");
     }
 
     public void sendSignUpData(  ){

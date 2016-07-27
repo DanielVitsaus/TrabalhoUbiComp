@@ -48,6 +48,8 @@ public class LoginActivity extends CommonActivity  {
         firebaseInstanceIDService = new FirebaseInstanceIDService();
         firebaseInstanceIDService.setContext(this.getApplicationContext());
         user = LibraryClass.getUser();
+        user.setLatitude("-21.7651294");
+        user.setLongetude("-43.3518573");
 
         firebase = LibraryClass.getFirebase();
 
