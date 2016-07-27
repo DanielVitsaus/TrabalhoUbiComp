@@ -14,7 +14,6 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.Map;
 
-import br.com.tiradividas.CustomApplication;
 import br.com.tiradividas.R;
 import br.com.tiradividas.SplashScreen;
 

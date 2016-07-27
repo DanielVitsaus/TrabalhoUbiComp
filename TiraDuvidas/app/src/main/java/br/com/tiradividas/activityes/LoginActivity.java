@@ -25,7 +25,7 @@ import br.com.tiradividas.util.FirebaseInstanceIDService;
 import br.com.tiradividas.util.LibraryClass;
 import br.com.tiradividas.util.Local;
 
-public class LoginActivity extends CommonActivity {
+public class LoginActivity extends CommonActivity  {
 
     private static final String IDUSER = "IDUSER";
     private static final String NOME = "NOME";
@@ -35,7 +35,9 @@ public class LoginActivity extends CommonActivity {
     private EditText senha;
     private Local local = null;
     private ProgressDialog dialog = null;
+    private boolean dia = false;
 
+    private FirebaseInstanceIDService firebaseInstanceIDService;
 
 
     @Override
@@ -43,6 +45,8 @@ public class LoginActivity extends CommonActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        firebaseInstanceIDService = new FirebaseInstanceIDService();
+        firebaseInstanceIDService.setContext(this.getApplicationContext());
         user = LibraryClass.getUser();
 
         firebase = LibraryClass.getFirebase();
@@ -52,11 +56,11 @@ public class LoginActivity extends CommonActivity {
             login.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    dia = true;
                     sendLoginData();
                 }
             });
         }
-
 
         initViews();
         verifyUserLogged();
@@ -66,10 +70,8 @@ public class LoginActivity extends CommonActivity {
 
    @Override
     protected void onStart() {
-       FirebaseInstanceIDService firebaseInstanceIDService = new FirebaseInstanceIDService();
-       firebaseInstanceIDService.setContext(this.getApplicationContext());
-       firebaseInstanceIDService.onTokenRefresh();
        super.onStart();
+       firebaseInstanceIDService.onTokenRefresh();
     }
 
     @Override
@@ -105,12 +107,14 @@ public class LoginActivity extends CommonActivity {
 
     public void sendLoginData(){
         //openProgressBar();
-        this.dialog = new ProgressDialog(this);
-        dialog.setMessage("Carregando...");
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.setCancelable(false);
-        dialog.show();
-
+        if(dia) {
+            this.dialog = new ProgressDialog(this);
+            dialog.setMessage("Carregando...");
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.setCancelable(false);
+            dialog.show();
+            dia = false;
+        }
         initUser();
         verifyLogin();
     }
@@ -174,7 +178,7 @@ public class LoginActivity extends CommonActivity {
                         //closeProgressBar();
                         if (dialog.isShowing()) {
                             dialog.dismiss();
-                            local.pararConexaoComGoogleApi();
+                            //local.pararConexaoComGoogleApi();
                         }
                         callMainActivity();
 

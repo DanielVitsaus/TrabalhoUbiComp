@@ -11,11 +11,8 @@ import android.widget.TextView;
 
 import com.firebase.client.Firebase;
 
-import br.com.tiradividas.activityes.Agenda;
-import br.com.tiradividas.activityes.Forum;
 import br.com.tiradividas.activityes.Localizacao;
 import br.com.tiradividas.activityes.LoginActivity;
-import br.com.tiradividas.activityes.MinhasDuvidas;
 import br.com.tiradividas.activityes.Perfil;
 import br.com.tiradividas.util.LibraryClass;
 

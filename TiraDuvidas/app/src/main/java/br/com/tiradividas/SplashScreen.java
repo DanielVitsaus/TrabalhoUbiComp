@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Window;
@@ -18,9 +19,9 @@ import com.firebase.client.ValueEventListener;
 import br.com.tiradividas.Model.User;
 import br.com.tiradividas.activityes.LoginActivity;
 import br.com.tiradividas.activityes.SemInternet;
-import br.com.tiradividas.util.FirebaseInstanceIDService;
 import br.com.tiradividas.util.LibraryClass;
 import br.com.tiradividas.util.Local;
+import br.com.tiradividas.util.UpdateBD;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -31,6 +32,7 @@ public class SplashScreen extends Activity {
     private static User user;
     private static final String IDUSER = "IDUSER";
     private Local local  = null;
+    private UpdateBD updateBD;
 
 
     @Override
@@ -43,6 +45,8 @@ public class SplashScreen extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_splash_screen);
+
+        updateBD =  new UpdateBD(this);
 
         user = LibraryClass.getUser();
 
@@ -78,9 +82,8 @@ public class SplashScreen extends Activity {
 
     private void coletaDado(final String id){
 
+
         Firebase firebase = LibraryClass.getFirebase();
-
-
         firebase.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -112,6 +115,11 @@ public class SplashScreen extends Activity {
 
             }
         });
+
+
+        if(user == null) {
+            new ColetaDados().execute(id);
+        }
     }
 
     private void delay(int time){
@@ -133,6 +141,24 @@ public class SplashScreen extends Activity {
         ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    public class ColetaDados extends AsyncTask<String, Void, Void>{
+
+        @Override
+        protected Void doInBackground(String... strings) {
+
+            user = updateBD.findUser(strings[0]);
+            local = new Local(SplashScreen.this);
+            delay(200);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            finish();
+        }
     }
 
 }

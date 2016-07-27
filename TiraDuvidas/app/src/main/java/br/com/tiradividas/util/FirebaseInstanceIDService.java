@@ -39,7 +39,9 @@ public class FirebaseInstanceIDService extends FirebaseInstanceIdService {
         refreshedToken = FirebaseInstanceId.getInstance().getToken();
         //Log.i("TOKEN" , refreshedToken);
 
-        LibraryClass.saveSP(context, TOKEN_NOTFI, refreshedToken);
+        if (context != null && refreshedToken != null) {
+            LibraryClass.saveSP(context, TOKEN_NOTFI, refreshedToken);
+        }
         // Send registration to app's server.
         //registerToken(refreshedToken);
     }

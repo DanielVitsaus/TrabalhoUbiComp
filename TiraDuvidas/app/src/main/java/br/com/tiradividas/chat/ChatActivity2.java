@@ -1,20 +1,13 @@
 package br.com.tiradividas.chat;
 
-import android.annotation.TargetApi;
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,7 +16,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
@@ -33,14 +25,8 @@ import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
-import com.firebase.client.collection.LLRBNode;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -81,6 +67,8 @@ public class ChatActivity2 extends AppCompatActivity {
     private String uri;
     private File imageFile;
     private StorageReference riversRef;
+
+    //private static boolean preencher = true;
 
     private ProgressBar progressBar;
 
@@ -147,7 +135,9 @@ public class ChatActivity2 extends AppCompatActivity {
                     /**
                      * Firebase - Send message
                      */
+                    //preencher = true;
                     mFirebaseRef.push().setValue(new Chat(message, nomeuser,mId, "0"));
+
                     Log.i("RES", "ENVIADO");
                     FirebaseInstanceIDService firebaseInstanceIDService = new FirebaseInstanceIDService();
 
@@ -158,7 +148,6 @@ public class ChatActivity2 extends AppCompatActivity {
                             idChat, LibraryClass.getUser().getId(), "Seu amigo precisa de você.!"+nomeuser);
                     //envia msg para o serdidor dizendo que mando um nova mensagem
                 }
-
                 metText.setText("");
             }
         });
@@ -178,15 +167,19 @@ public class ChatActivity2 extends AppCompatActivity {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 if (dataSnapshot != null && dataSnapshot.getValue() != null) {
                     try{
-                        Chat model = dataSnapshot.getValue(Chat.class);
-                        model.setIdMessage(dataSnapshot.getKey());
-                        if (model.getTipo_message().compareTo("1") == 0){
-                            mAdapter.setFile(imageFile);
-                        }
-                        mChats.add(model);
-                        mRecyclerView.scrollToPosition(mChats.size() - 1);
-                        mAdapter.notifyItemInserted(mChats.size() - 1);
 
+                       // if (preencher) {
+                            Chat model = dataSnapshot.getValue(Chat.class);
+                            model.setIdMessage(dataSnapshot.getKey());
+                            if (model.getTipo_message().compareTo("1") == 0) {
+                                mAdapter.setFile(imageFile);
+                            }
+
+                            mChats.add(model);
+                            mRecyclerView.scrollToPosition(mChats.size() - 1);
+                            mAdapter.notifyItemInserted(mChats.size() - 1);
+                            //preencher = false;
+                       // }
                     } catch (Exception ex) {
                         Log.e(TAG, ex.getMessage());
                     }
@@ -213,7 +206,9 @@ public class ChatActivity2 extends AppCompatActivity {
             public void onCancelled(FirebaseError firebaseError) {
 
             }
+
         });
+
         super.onStart();
     }
 
@@ -224,8 +219,14 @@ public class ChatActivity2 extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+       super.onResume();
+        //preencher = true;
+    }
+
+    @Override
     protected void onStop() {
-        //mChats.clear();
+        //preencher = false;
         //mFirebaseRef.unauth();
         super.onStop();
     }
@@ -239,7 +240,7 @@ public class ChatActivity2 extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        //mChats.clear();
+        //preencher = false;
         super.onPause();
     }
 
@@ -300,10 +301,12 @@ public class ChatActivity2 extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         //String uriDOW;
+        //preencher = true;
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
 
                 mFirebaseRef.push().setValue(new Chat(uri, nomeuser, mId, "1", " ", false, idChat));
+                //preencher = true;
 
             }
         }else  if (requestCode == SELECT_PICTURE){
@@ -312,6 +315,7 @@ public class ChatActivity2 extends AppCompatActivity {
                 selectedImagePath = getPath(selectedImageUri);
                 Toast.makeText(this, selectedImageUri.toString(), Toast.LENGTH_LONG).show();
                 mFirebaseRef.push().setValue(new Chat(selectedImagePath, nomeuser, mId, "1", " ", false, idChat));
+
                 //mFirebaseRef.push().setValue(new Chat(uri, nomeuser,mId, "1", " "));
             }
         }
@@ -320,6 +324,7 @@ public class ChatActivity2 extends AppCompatActivity {
                 Uri selectedImageUri = data.getData();
                 selectedDocumentPath = getPath(selectedImageUri);
                 mFirebaseRef.push().setValue(new Chat(selectedImagePath, nomeuser, mId, "1", " ", false, idChat));
+
                 //mFirebaseRef.push().setValue(new Chat(uri, nomeuser,mId, "2", " "));
             }
         }

@@ -9,7 +9,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 
@@ -21,7 +20,6 @@ import java.util.Map;
 import br.com.tiradividas.Model.User;
 import br.com.tiradividas.R;
 import br.com.tiradividas.util.LibraryClass;
-import br.com.tiradividas.util.Local;
 import br.com.tiradividas.util.UpdateBD;
 
 public class SignUpActivity extends CommonActivity {
@@ -50,6 +48,8 @@ public class SignUpActivity extends CommonActivity {
         setContentView(R.layout.activity_sign_up);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        updateBD = new UpdateBD(this);
 
         mat_dif = (Spinner) findViewById(R.id.spinner_mat_dif);
         mat_dom = (Spinner) findViewById(R.id.spinner_mat_dom);
@@ -166,7 +166,7 @@ public class SignUpActivity extends CommonActivity {
                         if (dialog.isShowing()) {
                             dialog.dismiss();
                         }
-                        finish();
+
                     }
 
                     @Override
@@ -181,12 +181,21 @@ public class SignUpActivity extends CommonActivity {
         );
     }
 
-    public class SalvarUser extends AsyncTask<User,Void,Void>{
+    public void  finaliza(){
+        finish();
+    }
+
+    public class SalvarUser extends AsyncTask<User,Void,Long>{
 
         @Override
-        protected Void doInBackground(User... users) {
-            updateBD.adicionaUser(users[0]);
-            return null;
+        protected Long doInBackground(User... users) {
+            return updateBD.adicionaUser(users[0]);
+        }
+
+        @Override
+        protected void onPostExecute(Long aLong) {
+            super.onPostExecute(aLong);
+            finaliza();
         }
     }
 }

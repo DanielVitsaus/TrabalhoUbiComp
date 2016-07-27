@@ -75,7 +75,7 @@ public class UpdateBD extends SQLiteOpenHelper {
                 valuesP.put("_matdif", user.getMateria_dificuldade());
                 valuesP.put("_idfirebase", user.getId());
 
-                db.insert("user", null, valuesP);
+                db.insert("users", null, valuesP);
 
             }
 
@@ -141,7 +141,7 @@ public class UpdateBD extends SQLiteOpenHelper {
 
         try{
 
-            Cursor c = db.query("user", columns, "_nome=?", new String[]{id}, null, null, null);
+            Cursor c = db.query("users", columns, "_nome=?", new String[]{id}, null, null, null);
 
             ContentValues valuesP = new ContentValues();
 
@@ -154,7 +154,7 @@ public class UpdateBD extends SQLiteOpenHelper {
                 valuesP.put("_matdif", user.getMateria_dificuldade());
                 valuesP.put("_idfirebase", user.getId());
 
-                db.insert("user", null, valuesP);
+                db.insert("users", null, valuesP);
 
             }
 
