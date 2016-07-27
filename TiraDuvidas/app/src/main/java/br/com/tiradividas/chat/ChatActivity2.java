@@ -1,5 +1,6 @@
 package br.com.tiradividas.chat;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -280,17 +281,17 @@ public class ChatActivity2 extends AppCompatActivity {
             Intent intent = new Intent();
             intent.setType("image/*");
             intent.setAction(Intent.ACTION_GET_CONTENT);
-            //startActivityForResult(Intent.createChooser(intent,"Select Picture"), SELECT_PICTURE);
-            startActivityForResult(intent, SELECT_PICTURE);
+            startActivityForResult(Intent.createChooser(intent,"Select Picture"), SELECT_PICTURE);
 
             return true;
 
         }else if (id == R.id.m_doc) {
-            Intent intent = new Intent();
-            intent.setType("document/*");
-            intent.setAction(Intent.ACTION_GET_CONTENT);
-            //startActivityForResult(Intent.createChooser(intent,"Select Document"), SELECT_DOCUMENT);
-            startActivityForResult(intent, SELECT_DOCUMENT);
+
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("*/*");
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            startActivityForResult(Intent.createChooser(intent,"Select a File to Upload"), SELECT_DOCUMENT);
+
             return true;
         }
 
@@ -312,7 +313,7 @@ public class ChatActivity2 extends AppCompatActivity {
         }else  if (requestCode == SELECT_PICTURE){
             if (resultCode == RESULT_OK){
                 Uri selectedImageUri = data.getData();
-                selectedImagePath = getPath(selectedImageUri);
+                selectedImagePath = getPathArquivo(this,selectedImageUri);
                 Toast.makeText(this, selectedImageUri.toString(), Toast.LENGTH_LONG).show();
                 mFirebaseRef.push().setValue(new Chat(selectedImagePath, nomeuser, mId, "1", " ", false, idChat));
 
@@ -322,12 +323,14 @@ public class ChatActivity2 extends AppCompatActivity {
         else  if (requestCode == SELECT_DOCUMENT){
             if (resultCode == RESULT_OK){
                 Uri selectedImageUri = data.getData();
-                selectedDocumentPath = getPath(selectedImageUri);
-                mFirebaseRef.push().setValue(new Chat(selectedImagePath, nomeuser, mId, "1", " ", false, idChat));
+                selectedDocumentPath = getPathArquivo(this,selectedImageUri);
+                mFirebaseRef.push().setValue(new Chat(selectedDocumentPath, nomeuser, mId, "2", " ", false, idChat));
 
                 //mFirebaseRef.push().setValue(new Chat(uri, nomeuser,mId, "2", " "));
             }
         }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     /**
@@ -352,6 +355,35 @@ public class ChatActivity2 extends AppCompatActivity {
         }
 
         return uri.getPath();
+    }
+
+
+    public String getPathArquivo(Context context, Uri uri){
+        if ("content".equalsIgnoreCase(uri.getScheme())) {
+            String[] projection = { "_data" };
+            //String[] projection = { MediaStore.Files.FileColumns.DATA };
+            Cursor cursor = null;
+
+            try {
+                cursor = context.getContentResolver().query(uri, projection, null, null, null);
+                int column_index = 0;
+                if (cursor != null) {
+                    column_index = cursor.getColumnIndexOrThrow( "_data" );
+
+                    if (cursor.moveToFirst()) {
+                        return cursor.getString(column_index);
+                    }
+                }
+
+            } catch (Exception e) {
+                // Eat it
+            }
+        }
+        else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            return uri.getPath();
+        }
+
+        return null;
     }
 
 }

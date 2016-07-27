@@ -1,15 +1,19 @@
 package br.com.tiradividas.adapter;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.client.Firebase;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -51,6 +55,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         public TextView author;
         public TextView message;
         public ProgressBar progressBar;
+        public ProgressBar progressBar_ar;
         public ImageView imageView;
 
         public ViewHolder(View v) {
@@ -58,6 +63,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             author = (TextView) itemView.findViewById(R.id.author);
             message = (TextView) itemView.findViewById(R.id.message);
             progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar_teste);
+            progressBar_ar = (ProgressBar) itemView.findViewById(R.id.progressBar_ar);
             imageView = (ImageView) itemView.findViewById(R.id.chat_img_right);
         }
     }
@@ -160,58 +166,130 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         if (chat.getTipo_message().compareTo("1") == 0 && !chat.isEnviado()) {
             if (holder.progressBar != null && holder.imageView != null) {
 
-                holder.progressBar.setVisibility(View.VISIBLE);
-                FirebaseStorage storage = LibraryClass.getStorage();
-                StorageReference storageRef = storage.getReferenceFromUrl("gs://chatduvidas.appspot.com");
-
 
                 File file1 = new File(chat.getMessage());
-                Uri file = Uri.fromFile(file1);
 
-                //holder.imageView.setImageURI(file);
+                if (file1 != null && file1.exists()) {
 
-                UploadTask uploadTask = storageRef.child("images/" + file.getLastPathSegment()).putFile(file);
-                uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    holder.progressBar.setVisibility(View.VISIBLE);
+                    FirebaseStorage storage = LibraryClass.getStorage();
+                    StorageReference storageRef = storage.getReferenceFromUrl("gs://chatduvidas.appspot.com");
 
-                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                    Uri file = Uri.fromFile(file1);
+                    int w = holder.imageView.getWidth();
+                    int h = holder.imageView.getHeight();
+                    /*
+                    holder.imageView.setImageURI(file);
+                    BitmapDrawable drawable = (BitmapDrawable) holder.imageView.getDrawable();
+                    Bitmap bitmap = drawable.getBitmap();
+                    bitmap = Bitmap.createScaledBitmap(bitmap, w, h, true);
+                    holder.imageView.setImageBitmap(bitmap);
+                    */
 
-                        Snackbar.make(holder.progressBar,
-                                "Imagem enviado com sucesso.",
-                                Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                    //holder.imageView.setImageURI(file);
 
-                        holder.progressBar.setVisibility(View.INVISIBLE);
-                        chat.setEnviado(true);
-                        Map<String, Object> map = new HashMap<>();
-                        map.put("enviado", true);
+                    UploadTask uploadTask = storageRef.child("images/" + file.getLastPathSegment()).putFile(file);
+                    uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                        if (downloadUrl != null) {
-                            map.put("linkdow", downloadUrl.toString());
+                            Uri downloadUrl = taskSnapshot.getDownloadUrl();
+
+                            Snackbar.make(holder.progressBar,
+                                    "Imagem enviado com sucesso.",
+                                    Snackbar.LENGTH_LONG).setAction("Action", null).show();
+
+                            holder.progressBar.setVisibility(View.INVISIBLE);
+                            chat.setEnviado(true);
+                            Map<String, Object> map = new HashMap<>();
+                            map.put("enviado", true);
+
+                            if (downloadUrl != null) {
+                                map.put("linkdow", downloadUrl.toString());
+                            }
+                            firebase.child(chat.getIdMessage()).updateChildren(map);
+
+                            //Log.i("DOW", downloadUrl.toString());
+
                         }
-                        firebase.child(chat.getIdMessage()).updateChildren(map);
+                    }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                            holder.progressBar.setProgress((int) progress);
+                            System.out.println("Upload is " + progress + "% done");
+                        }
 
-                        //Log.i("DOW", downloadUrl.toString());
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            Snackbar.make(holder.progressBar,
+                                    "Erro ao enviar imagem!",
+                                    Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                        }
+                    });
 
-                    }
-                }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                        double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-                        holder.progressBar.setProgress((int) progress);
-                        System.out.println("Upload is " + progress + "% done");
-                    }
-
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        Snackbar.make(holder.progressBar,
-                                "Erro ao enviar imagem!",
-                                Snackbar.LENGTH_LONG).setAction("Action", null).show();
-                    }
-                });
-
+                }
             }
+        }
+
+        if (chat.getTipo_message().compareTo("2") == 0 && !chat.isEnviado()) {
+            if (holder.progressBar_ar != null) {
+
+                File file1 = new File(chat.getMessage());
+
+                if (file1 != null && file1.exists()) {
+
+                    holder.progressBar_ar.setVisibility(View.VISIBLE);
+                    FirebaseStorage storage = LibraryClass.getStorage();
+                    StorageReference storageRef = storage.getReferenceFromUrl("gs://chatduvidas.appspot.com");
+
+                    Uri file = Uri.fromFile(file1);
+
+                    UploadTask uploadTask = storageRef.child("archives/" + file.getLastPathSegment()).putFile(file);
+                    uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                            Uri downloadUrl = taskSnapshot.getDownloadUrl();
+
+                            Snackbar.make(holder.progressBar_ar,
+                                    "Arquivo enviado com sucesso.",
+                                    Snackbar.LENGTH_LONG).setAction("Action", null).show();
+
+                            holder.progressBar_ar.setVisibility(View.INVISIBLE);
+                            chat.setEnviado(true);
+                            Map<String, Object> map = new HashMap<>();
+                            map.put("enviado", true);
+
+                            if (downloadUrl != null) {
+                                map.put("linkdow", downloadUrl.toString());
+                            }
+                            firebase.child(chat.getIdMessage()).updateChildren(map);
+
+                        }
+                    }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                            holder.progressBar_ar.setProgress((int) progress);
+                            System.out.println("Upload is " + progress + "% done");
+                        }
+
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            Snackbar.make(holder.progressBar,
+                                    "Erro ao enviar imagem!",
+                                    Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                        }
+                    });
+
+                }else{
+                    Log.i("UP" , "não foi.");
+                }
+            }
+
         }
 
     }

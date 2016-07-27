@@ -3,8 +3,12 @@ package br.com.tiradividas.util;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -64,6 +68,8 @@ public class Local implements GoogleApiClient.ConnectionCallbacks, GoogleApiClie
         else {
             new BuscaUser().execute();
         }
+
+        ativaGPS();
 
     }
 
@@ -149,6 +155,7 @@ public class Local implements GoogleApiClient.ConnectionCallbacks, GoogleApiClie
         //locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
+
         if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -171,6 +178,7 @@ public class Local implements GoogleApiClient.ConnectionCallbacks, GoogleApiClie
     public void pararConexaoComGoogleApi() {
         //Verificando se está conectado para então cancelar a conexão!
         if (mGoogleApiClient.isConnected()) {
+            desativaGPS();
             stopLocationUpdates();
             mGoogleApiClient.disconnect();
         }
@@ -194,6 +202,32 @@ public class Local implements GoogleApiClient.ConnectionCallbacks, GoogleApiClie
         distancia = SphericalUtil.computeDistanceBetween(posicaoInicial, posicaiFinal);
 
         return formatNumber(distancia);
+    }
+
+    public void ativaGPS(){
+
+        LocationManager locationManager = (LocationManager) this.activity.getSystemService(Context.LOCATION_SERVICE);
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+        {
+            Intent intent = new Intent();
+            intent.setClassName("com.android.settings", "com.android.settings.widget.SettingsAppWidgetProvider");
+            intent.addCategory(Intent.CATEGORY_ALTERNATIVE);
+            intent.setData(Uri.parse("3"));
+            this.activity.sendBroadcast(intent);
+        }
+    }
+
+    public void desativaGPS(){
+
+        LocationManager locationManager = (LocationManager) this.activity.getSystemService(Context.LOCATION_SERVICE);
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+        {
+            Intent intent = new Intent();
+            intent.setClassName("com.android.settings", "com.android.settings.widget.SettingsAppWidgetProvider");
+            intent.addCategory(Intent.CATEGORY_ALTERNATIVE);
+            intent.setData(Uri.parse("3"));
+            this.activity.sendBroadcast(intent);
+        }
     }
 
     public Location getLocation() {
