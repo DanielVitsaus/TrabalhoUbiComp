@@ -11,6 +11,7 @@ public class Chat {
     private String tipo_message;
     private String linkdow;
     private boolean isEnviado = true;
+    private boolean isBaixado = true;
     private String idMessage;
     private String idChat;
 
@@ -26,13 +27,14 @@ public class Chat {
         this.tipo_message = tipo_message;
     }
 
-    public Chat(String message, String author, String id, String tipo_message, String linkdow, boolean isEnviado, String idChat) {
+    public Chat(String message, String author, String id, String tipo_message, String linkdow, boolean isEnviado, boolean isBaixado,String idChat) {
         this.message = message;
         this.author = author;
         this.id = id;
         this.tipo_message = tipo_message;
         this.linkdow = linkdow;
         this.isEnviado = isEnviado;
+        this.isBaixado = isBaixado;
         this.idChat = idChat;
     }
 
@@ -99,6 +101,14 @@ public class Chat {
 
     public void setEnviado(boolean enviado) {
         isEnviado = enviado;
+    }
+
+    public boolean isBaixado() {
+        return isBaixado;
+    }
+
+    public void setBaixado(boolean baixado) {
+        isBaixado = baixado;
     }
 
     public String getIdMessage() {

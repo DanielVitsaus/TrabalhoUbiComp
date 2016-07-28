@@ -306,7 +306,7 @@ public class ChatActivity2 extends AppCompatActivity {
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
 
-                mFirebaseRef.push().setValue(new Chat(uri, nomeuser, mId, "1", " ", false, idChat));
+                mFirebaseRef.push().setValue(new Chat(uri, nomeuser, mId, "1", " ", false, false, idChat));
                 //preencher = true;
 
             }
@@ -315,7 +315,7 @@ public class ChatActivity2 extends AppCompatActivity {
                 Uri selectedImageUri = data.getData();
                 selectedImagePath = getPathArquivo(this,selectedImageUri);
                 Toast.makeText(this, selectedImageUri.toString(), Toast.LENGTH_LONG).show();
-                mFirebaseRef.push().setValue(new Chat(selectedImagePath, nomeuser, mId, "1", " ", false, idChat));
+                mFirebaseRef.push().setValue(new Chat(selectedImagePath, nomeuser, mId, "1", " ", false, false,idChat));
 
                 //mFirebaseRef.push().setValue(new Chat(uri, nomeuser,mId, "1", " "));
             }
@@ -324,7 +324,7 @@ public class ChatActivity2 extends AppCompatActivity {
             if (resultCode == RESULT_OK){
                 Uri selectedImageUri = data.getData();
                 selectedDocumentPath = getPathArquivo(this,selectedImageUri);
-                mFirebaseRef.push().setValue(new Chat(selectedDocumentPath, nomeuser, mId, "2", " ", false, idChat));
+                mFirebaseRef.push().setValue(new Chat(selectedDocumentPath, nomeuser, mId, "2", " ", false,false, idChat));
 
                 //mFirebaseRef.push().setValue(new Chat(uri, nomeuser,mId, "2", " "));
             }
