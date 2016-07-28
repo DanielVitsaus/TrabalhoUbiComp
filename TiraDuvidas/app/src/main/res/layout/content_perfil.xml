@@ -9,7 +9,143 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="br.com.tiradividas.activityes.Perfil"
-    tools:showIn="@layout/activity_perfil">
+    tools:context="br.com.tiradividas.activityes.Perfil">
 
+    <Button
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:text="Salvar"
+        android:id="@+id/button"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        android:typeface="serif"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="52dp" />
+
+    <AutoCompleteTextView
+        android:id="@+id/autoCompleteTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textCapSentences|textPersonName|textAutoCorrect"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textSize="16sp"
+        android:hint="nome"
+        android:imeOptions="actionNext"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <AutoCompleteTextView
+        android:id="@+id/autoCompleteTextView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:hint="email"
+        android:textSize="16sp"
+        android:imeOptions="actionNext"
+        android:layout_below="@+id/autoCompleteTextView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <AutoCompleteTextView
+        android:id="@+id/autoCompleteTextView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="escolaridade"
+        android:inputType="textCapSentences|textAutoCorrect"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textSize="16sp"
+        android:imeOptions="actionNext"
+        android:layout_below="@+id/autoCompleteTextView2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <AutoCompleteTextView
+        android:id="@+id/autoCompleteTextView4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="idade"
+        android:inputType="textAutoCorrect|textCapCharacters"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textSize="16sp"
+        android:imeOptions="actionNext"
+        android:layout_below="@+id/autoCompleteTextView3"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/linearLayout"
+        android:layout_below="@+id/autoCompleteTextView4"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Materia com dificuldade"
+            android:id="@+id/textView2"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="4dp"
+            android:textSize="16sp"
+            android:textColor="#000000"
+            android:typeface="serif"
+            android:layout_marginTop="6dp" />
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinner"
+            android:drawSelectorOnTop="true" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/linearLayout2"
+        android:layout_below="@+id/linearLayout"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Materia que Domina"
+            android:id="@+id/textView3"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="4dp"
+            android:textSize="16sp"
+            android:textColor="#000000"
+            android:typeface="serif"
+            android:layout_marginTop="6dp" />
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinner2"
+            android:drawSelectorOnTop="true" />
+    </LinearLayout>
+
+    <AutoCompleteTextView
+        android:id="@+id/autoCompleteTextView5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="senha"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textSize="16sp"
+        android:inputType="textPassword"
+        android:imeOptions="actionNext"
+        android:layout_below="@+id/linearLayout2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 </RelativeLayout>
