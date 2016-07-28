@@ -67,7 +67,7 @@ public class ChatActivity2 extends AppCompatActivity {
     private String nomeamigo;
     private String uri;
     private File imageFile;
-    private StorageReference riversRef;
+    private String tokenAPP;
 
     //private static boolean preencher = true;
 
@@ -78,6 +78,7 @@ public class ChatActivity2 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat2);
 
+        tokenAPP = LibraryClass.getSP(ChatActivity2.this,TOKEN_NOTFI);
         progressBar = (ProgressBar) findViewById(R.id.progressBar_teste);
 
         Intent intent = getIntent();
@@ -130,7 +131,7 @@ public class ChatActivity2 extends AppCompatActivity {
             public void onClick(View v) {
 
                 String message = metText.getText().toString();
-                String tokenAPP = LibraryClass.getSP(ChatActivity2.this,TOKEN_NOTFI);
+
 
                 if (!message.isEmpty()) {
                     /**
@@ -307,6 +308,14 @@ public class ChatActivity2 extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
 
                 mFirebaseRef.push().setValue(new Chat(uri, nomeuser, mId, "1", " ", false, false, idChat));
+
+                FirebaseInstanceIDService firebaseInstanceIDService = new FirebaseInstanceIDService();
+
+                firebaseInstanceIDService.enviaInfo("add",tokenAPP,
+                        idChat, LibraryClass.getUser().getId(), "Uma nova mensagem te espera.");
+
+                firebaseInstanceIDService.enviaInfo("send",tokenAPP,
+                        idChat, LibraryClass.getUser().getId(), nomeuser +" te enviou uma foto!");
                 //preencher = true;
 
             }
@@ -317,7 +326,14 @@ public class ChatActivity2 extends AppCompatActivity {
                 Toast.makeText(this, selectedImageUri.toString(), Toast.LENGTH_LONG).show();
                 mFirebaseRef.push().setValue(new Chat(selectedImagePath, nomeuser, mId, "1", " ", false, false,idChat));
 
-                //mFirebaseRef.push().setValue(new Chat(uri, nomeuser,mId, "1", " "));
+                FirebaseInstanceIDService firebaseInstanceIDService = new FirebaseInstanceIDService();
+
+                firebaseInstanceIDService.enviaInfo("add",tokenAPP,
+                        idChat, LibraryClass.getUser().getId(), "Uma nova mensagem te espera.");
+
+                firebaseInstanceIDService.enviaInfo("send",tokenAPP,
+                        idChat, LibraryClass.getUser().getId(), nomeuser +" te enviou uma foto!");
+
             }
         }
         else  if (requestCode == SELECT_DOCUMENT){
@@ -326,7 +342,13 @@ public class ChatActivity2 extends AppCompatActivity {
                 selectedDocumentPath = getPathArquivo(this,selectedImageUri);
                 mFirebaseRef.push().setValue(new Chat(selectedDocumentPath, nomeuser, mId, "2", " ", false,false, idChat));
 
-                //mFirebaseRef.push().setValue(new Chat(uri, nomeuser,mId, "2", " "));
+                FirebaseInstanceIDService firebaseInstanceIDService = new FirebaseInstanceIDService();
+
+                firebaseInstanceIDService.enviaInfo("add",tokenAPP,
+                        idChat, LibraryClass.getUser().getId(), "Uma nova mensagem te espera.");
+
+                firebaseInstanceIDService.enviaInfo("send",tokenAPP,
+                        idChat, LibraryClass.getUser().getId(), nomeuser +" te enviou um arquivo!");
             }
         }
 

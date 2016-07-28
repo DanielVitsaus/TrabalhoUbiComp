@@ -103,11 +103,13 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             case CHAT_IMAGE_RIGHT:
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.chat_message_foto_right, parent, false);
+                receber = false;
             break;
 
             case CHAT_DOC_RIGHT:
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.chat_message_file_right, parent, false);
+                receber = false;
             break;
 
             case CHAT_LEFT:
@@ -249,6 +251,11 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
                 //holder.imageView.setImageURI(file);
 
+                chat.setEnviado(true);
+                Map<String, Object> map = new HashMap<>();
+                map.put("enviado", true);
+                firebase.child(chat.getIdMessage()).updateChildren(map);
+
                 UploadTask uploadTask = storageRef.child("images/" + file.getLastPathSegment()).putFile(file);
                 uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -284,6 +291,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception exception) {
+
+                        chat.setEnviado(false);
+                        Map<String, Object> map = new HashMap<>();
+                        map.put("enviado", false);
+                        firebase.child(chat.getIdMessage()).updateChildren(map);
+
                         Snackbar.make(holder.progressBar,
                                 "Erro ao enviar imagem!",
                                 Snackbar.LENGTH_LONG).setAction("Action", null).show();
@@ -305,6 +318,11 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 holder.progressBar.setVisibility(View.VISIBLE);
                 FirebaseStorage storage = LibraryClass.getStorage();
                 StorageReference storageRef = storage.getReferenceFromUrl("gs://chatduvidas.appspot.com");
+
+                chat.setEnviado(true);
+                Map<String, Object> map = new HashMap<>();
+                map.put("enviado", true);
+                firebase.child(chat.getIdMessage()).updateChildren(map);
 
                 Uri file = Uri.fromFile(file1);
 
@@ -341,6 +359,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception exception) {
+                        chat.setEnviado(false);
+                        Map<String, Object> map = new HashMap<>();
+                        map.put("enviado", false);
+                        firebase.child(chat.getIdMessage()).updateChildren(map);
                         Snackbar.make(holder.progressBar,
                                 "Erro ao enviar imagem!",
                                 Snackbar.LENGTH_LONG).setAction("Action", null).show();
@@ -376,13 +398,17 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                         e.printStackTrace();
                     }
 
-                    if (file != null && !file.exists()) {
+                    if (file != null) {
 
                         holder.progressBar_dow.setVisibility(View.VISIBLE);
                         FirebaseStorage storage = LibraryClass.getStorage();
                         StorageReference storageRef = storage.getReferenceFromUrl("gs://chatduvidas.appspot.com");
 
                         StorageReference download = storageRef.child("images/"+imageName);
+                        chat.setBaixado(true);
+                        Map<String, Object> map = new HashMap<>();
+                        map.put("baixado", true);
+                        firebase.child(chat.getIdMessage()).updateChildren(map);
 
                         download.getFile(file).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                             @Override
@@ -416,6 +442,11 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                                 holder.imageView_dow.setVisibility(View.VISIBLE);
                                 holder.progressBar_dow.setVisibility(View.INVISIBLE);
 
+                                chat.setBaixado(false);
+                                Map<String, Object> map = new HashMap<>();
+                                map.put("baixado", false);
+                                firebase.child(chat.getIdMessage()).updateChildren(map);
+
                                 Snackbar.make(holder.progressBar_dow,
                                         "Erro ao baixar a imagem.",
                                         Snackbar.LENGTH_LONG).setAction("Action", null).show();
@@ -443,8 +474,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                     String[] part = chat.getMessage().split("/");
                     String imageName = part[part.length-1];
                     System.out.println(imageName);
+                    String[] tiop = imageName.split(".");
+                    File file;
 
-                    File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), imageName);
+                    file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), imageName);
 
                     File localFile = null;
                     try {
@@ -453,14 +486,19 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                         e.printStackTrace();
                     }
 
-                    if (file != null && !file.exists()) {
+                    if (file != null) {
 
                         holder.progressBar_dow.setVisibility(View.VISIBLE);
                         FirebaseStorage storage = LibraryClass.getStorage();
                         StorageReference storageRef = storage.getReferenceFromUrl("gs://chatduvidas.appspot.com");
 
-                        StorageReference download = storageRef.child("archives/"+imageName);
+                        chat.setBaixado(true);
+                        Map<String, Object> map = new HashMap<>();
+                        map.put("baixado", true);
+                        firebase.child(chat.getIdMessage()).updateChildren(map);
 
+                        StorageReference download = storageRef.child("archives/"+imageName);
+                        System.out.println(imageName);
                         download.getFile(file).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                             @Override
                             public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
@@ -469,7 +507,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                                 chat.setBaixado(true);
                                 Map<String, Object> map = new HashMap<>();
                                 map.put("baixado", true);
-
                                 firebase.child(chat.getIdMessage()).updateChildren(map);
 
 
@@ -491,6 +528,11 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                             public void onFailure(@NonNull Exception e) {
                                 holder.imageView_dow.setVisibility(View.VISIBLE);
                                 holder.progressBar_dow.setVisibility(View.INVISIBLE);
+
+                                chat.setBaixado(false);
+                                Map<String, Object> map = new HashMap<>();
+                                map.put("baixado", false);
+                                firebase.child(chat.getIdMessage()).updateChildren(map);
 
                                 Snackbar.make(holder.progressBar_dow,
                                         "Erro ao baixar o arquivo.",
