@@ -1,13 +1,11 @@
 package br.com.tiradividas.activityes;
 
 import android.app.ProgressDialog;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,7 +17,6 @@ import android.widget.TextView;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 
-import java.util.List;
 import java.util.Map;
 
 import br.com.tiradividas.MainActivity;
@@ -129,7 +126,6 @@ public class Perfil extends MainActivity {
     }
 
     public void sendPerfilData(  ){
-        //openProgressBar();
         this.dialog = new ProgressDialog(this);
         dialog.setMessage("Salvando...");
         dialog.setCanceledOnTouchOutside(false);
@@ -159,15 +155,10 @@ public class Perfil extends MainActivity {
                 new Firebase.ValueResultHandler<Map<String, Object>>() {
                     @Override
                     public void onSuccess(Map<String, Object> stringObjectMap) {
-                        //LibraryClass.saveSP(SignUpActivity.this, IDUSER , stringObjectMap.get("uid").toString());
-                        //LibraryClass.saveSP(SignUpActivity.this, EMAILUSER , user.getEmail());
                         user.setId( stringObjectMap.get("uid").toString() );
                         user.saveDB();
-                        //new SalvarUser().execute(user);
                         firebase.unauth();
 
-                        //showToast( "Conta criada com sucesso!" );
-                        //closeProgressBar();
                         if (dialog.isShowing()) {
                             dialog.dismiss();
                         }
@@ -176,8 +167,6 @@ public class Perfil extends MainActivity {
 
                     @Override
                     public void onError(FirebaseError firebaseError) {
-                        //showToast( firebaseError.getMessage() );
-                        //closeProgressBar();
                         if (dialog.isShowing()) {
                             dialog.dismiss();
                         }

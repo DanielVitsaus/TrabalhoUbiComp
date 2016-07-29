@@ -54,8 +54,6 @@ public class ChatActivity2 extends AppCompatActivity {
     private ImageButton mbtSent;
     private Firebase mFirebaseRef;
     private StorageReference storageRef;
-    private StorageReference imageFolderFireBase;
-    private StorageReference docFolderFireBase;
 
     private List<Chat> mChats;
     private RecyclerView mRecyclerView;
@@ -69,7 +67,6 @@ public class ChatActivity2 extends AppCompatActivity {
     private File imageFile;
     private String tokenAPP;
 
-    //private static boolean preencher = true;
 
     private ProgressBar progressBar;
 
@@ -114,7 +111,6 @@ public class ChatActivity2 extends AppCompatActivity {
 
         mId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        //mRecyclerView.setItemAnimator(new SlideInOutLeftItemAnimator(mRecyclerView));
 
         mFirebaseRef = LibraryClass.getFirebase_chat().child("chat").child(idChat);
 
@@ -134,13 +130,9 @@ public class ChatActivity2 extends AppCompatActivity {
 
 
                 if (!message.isEmpty()) {
-                    /**
-                     * Firebase - Send message
-                     */
                     //preencher = true;
                     mFirebaseRef.push().setValue(new Chat(message, nomeuser,mId, "0"));
 
-                    Log.i("RES", "ENVIADO");
                     FirebaseInstanceIDService firebaseInstanceIDService = new FirebaseInstanceIDService();
 
                     firebaseInstanceIDService.enviaInfo("add",tokenAPP,
@@ -148,16 +140,11 @@ public class ChatActivity2 extends AppCompatActivity {
 
                     firebaseInstanceIDService.enviaInfo("send",tokenAPP,
                             idChat, LibraryClass.getUser().getId(), "Seu amigo precisa de você.!"+nomeuser);
-                    //envia msg para o serdidor dizendo que mando um nova mensagem
                 }
                 metText.setText("");
             }
         });
 
-
-        /**
-         * Firebase - Receives message
-         */
 
     }
 
@@ -170,7 +157,6 @@ public class ChatActivity2 extends AppCompatActivity {
                 if (dataSnapshot != null && dataSnapshot.getValue() != null) {
                     try{
 
-                       // if (preencher) {
                             Chat model = dataSnapshot.getValue(Chat.class);
                             model.setIdMessage(dataSnapshot.getKey());
                             if (model.getTipo_message().compareTo("1") == 0) {
@@ -180,8 +166,7 @@ public class ChatActivity2 extends AppCompatActivity {
                             mChats.add(model);
                             mRecyclerView.scrollToPosition(mChats.size() - 1);
                             mAdapter.notifyItemInserted(mChats.size() - 1);
-                            //preencher = false;
-                       // }
+
                     } catch (Exception ex) {
                         Log.e(TAG, ex.getMessage());
                     }
@@ -223,13 +208,10 @@ public class ChatActivity2 extends AppCompatActivity {
     @Override
     protected void onResume() {
        super.onResume();
-        //preencher = true;
     }
 
     @Override
     protected void onStop() {
-        //preencher = false;
-        //mFirebaseRef.unauth();
         super.onStop();
     }
 
@@ -242,13 +224,12 @@ public class ChatActivity2 extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        //preencher = false;
         super.onPause();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+
         getMenuInflater().inflate(R.menu.menu_chat, menu);
 
         menu.getItem(0).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
@@ -364,8 +345,6 @@ public class ChatActivity2 extends AppCompatActivity {
             // TODO realizar algum log ou feedback do utilizador
             return null;
         }
-        // Tenta recuperar a imagem da media store primeiro
-        // Isto só irá funcionar para as imagens selecionadas da galeria
 
         String[] projection = { MediaStore.Images.Media.DATA };
         Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
@@ -383,7 +362,6 @@ public class ChatActivity2 extends AppCompatActivity {
     public String getPathArquivo(Context context, Uri uri){
         if ("content".equalsIgnoreCase(uri.getScheme())) {
             String[] projection = { "_data" };
-            //String[] projection = { MediaStore.Files.FileColumns.DATA };
             Cursor cursor = null;
 
             try {
@@ -398,7 +376,7 @@ public class ChatActivity2 extends AppCompatActivity {
                 }
 
             } catch (Exception e) {
-                // Eat it
+
             }
         }
         else if ("file".equalsIgnoreCase(uri.getScheme())) {

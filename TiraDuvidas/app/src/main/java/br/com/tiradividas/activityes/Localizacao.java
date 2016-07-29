@@ -32,7 +32,6 @@ public class Localizacao extends MainActivity {
     private Local local;
     private static User user;
     private static List<User> users;
-    //private UserRecyclerAdapter adapter;
     private RecyclerView recyclerView;
     private ProgressDialog dialog = null;
     private TextView nomeuser;

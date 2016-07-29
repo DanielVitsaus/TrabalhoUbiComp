@@ -87,7 +87,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
                 localizacao.startActivity(intent);
                 Toast.makeText(context, "Deu certo", Toast.LENGTH_LONG).show();
-                //localizacao.finish();
             }
         });
 

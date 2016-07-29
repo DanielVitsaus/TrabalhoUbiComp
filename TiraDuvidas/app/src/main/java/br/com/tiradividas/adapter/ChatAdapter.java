@@ -1,14 +1,10 @@
 package br.com.tiradividas.adapter;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +12,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.firebase.client.Firebase;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -28,7 +23,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,9 +49,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     private boolean receber = false;
 
-    /**
-     * Inner Class for a recycler view
-     */
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView author;
         public TextView message;
@@ -79,12 +70,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         }
     }
 
-    /**
-     * Called when a view has been clicked.
-     *
-     * @param dataSet Message list
-     * @param id      Device id
-     */
+
     public ChatAdapter(List<Chat> dataSet, String id, Firebase firebase) {
         mDataSet = dataSet;
         mId = id;
@@ -239,17 +225,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 StorageReference storageRef = storage.getReferenceFromUrl("gs://chatduvidas.appspot.com");
 
                 Uri file = Uri.fromFile(file1);
-                int w = holder.imageView.getWidth();
-                int h = holder.imageView.getHeight();
-                    /*
-                    holder.imageView.setImageURI(file);
-                    BitmapDrawable drawable = (BitmapDrawable) holder.imageView.getDrawable();
-                    Bitmap bitmap = drawable.getBitmap();
-                    bitmap = Bitmap.createScaledBitmap(bitmap, w, h, true);
-                    holder.imageView.setImageBitmap(bitmap);
-                    */
-
-                //holder.imageView.setImageURI(file);
 
                 chat.setEnviado(true);
                 Map<String, Object> map = new HashMap<>();
@@ -276,8 +251,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                             map.put("linkdow", downloadUrl.toString());
                         }
                         firebase.child(chat.getIdMessage()).updateChildren(map);
-
-                        //Log.i("DOW", downloadUrl.toString());
 
                     }
                 }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
@@ -391,12 +364,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
                     File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), imageName);
 
-                    File localFile = null;
-                    try {
-                        localFile = File.createTempFile("images", "jpg");
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
 
                     if (file != null) {
 
@@ -474,17 +441,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                     String[] part = chat.getMessage().split("/");
                     String imageName = part[part.length-1];
                     System.out.println(imageName);
-                    String[] tiop = imageName.split(".");
                     File file;
 
                     file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), imageName);
 
-                    File localFile = null;
-                    try {
-                        localFile = File.createTempFile("images", "jpg");
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
 
                     if (file != null) {
 
